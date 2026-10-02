@@ -60,6 +60,11 @@ class AsasLexiconRetriever:
     from 'Asas Al-Balagha' by Al-Zamakhshari.
     """
 
+    DEFAULT_FULL_DATA_PATH = os.path.join(
+        os.path.dirname(os.path.dirname(__file__)),
+        "data",
+        "asas_al_balagha_full.json"
+    )
     DEFAULT_DATA_PATH = os.path.join(
         os.path.dirname(os.path.dirname(__file__)),
         "data",
@@ -67,7 +72,12 @@ class AsasLexiconRetriever:
     )
 
     def __init__(self, data_path: Optional[str] = None):
-        self.data_path = data_path or self.DEFAULT_DATA_PATH
+        if data_path:
+            self.data_path = data_path
+        elif os.path.exists(self.DEFAULT_FULL_DATA_PATH):
+            self.data_path = self.DEFAULT_FULL_DATA_PATH
+        else:
+            self.data_path = self.DEFAULT_DATA_PATH
         self.entries: List[AsasEntry] = []
         self.root_index: Dict[str, AsasEntry] = {}
         self.lemma_index: Dict[str, AsasEntry] = {}

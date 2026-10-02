@@ -14,6 +14,11 @@ from rawiai.nlp.normalizer import ArabicNormalizer
 class PoetryLexicon:
     """Heritage vocabulary annotation engine for classical Arabic poetry."""
 
+    DEFAULT_FULL_DATA_PATH = os.path.join(
+        os.path.dirname(os.path.dirname(__file__)),
+        "data",
+        "asas_al_balagha_full.json"
+    )
     DEFAULT_DATA_PATH = os.path.join(
         os.path.dirname(os.path.dirname(__file__)),
         "data",
@@ -22,7 +27,13 @@ class PoetryLexicon:
 
     def __init__(self, custom_lexicon_path: Optional[str] = None):
         self.entries: Dict[str, DifficultWord] = {}
-        data_file = custom_lexicon_path or self.DEFAULT_DATA_PATH
+        if custom_lexicon_path:
+            data_file = custom_lexicon_path
+        elif os.path.exists(self.DEFAULT_FULL_DATA_PATH):
+            data_file = self.DEFAULT_FULL_DATA_PATH
+        else:
+            data_file = self.DEFAULT_DATA_PATH
+
         if os.path.exists(data_file):
             self.load_from_json(data_file)
 

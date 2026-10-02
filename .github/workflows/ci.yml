@@ -68,6 +68,7 @@ jobs:
       - name: Verify Dataset Integrity
         run: |
           python -c "import json; data=json.load(open('rawiai/data/asas_al_balagha.json')); assert len(data) >= 20, 'Asas Al-Balagha dataset corrupted'"
+          python -c "import json; data=json.load(open('rawiai/data/asas_al_balagha_full.json')); assert len(data) >= 3500, 'Full Asas Al-Balagha dataset corrupted'"
           python -c "import json; data=json.load(open('rawiai/data/golden_evaluation_dataset.json')); assert len(data) >= 10, 'Golden evaluation dataset corrupted'"
 
       - name: Run Pytest Suite
