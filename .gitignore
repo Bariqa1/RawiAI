@@ -43,6 +43,3 @@ htmlcov/
 *.faiss
 *.index
 *.pdf
-
-# Raw text dumps & corpora
-rawiai/data/*_full.txt
