@@ -1,0 +1,103 @@
+name: RawiAI CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  code-quality:
+    name: Code Quality & Syntax Check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install Linting Tools
+        run: |
+          python -m pip install --upgrade pip
+          pip install flake8
+
+      - name: Check Python Syntax (Byte-compile)
+        run: |
+          python -m compileall rawiai tests demo_nlp.py demo_dual_rag.py run_evaluation.py
+
+      - name: Lint with Flake8
+        run: |
+          # Stop the build if there are Python syntax errors or undefined names
+          flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+          # Exit-zero treats all warnings as warnings.
+          flake8 . --count --exit-zero --max-complexity=15 --max-line-length=127 --statistics
+
+  test:
+    name: Test Suite (Python ${{ matrix.python-version }})
+    needs: code-quality
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.10', '3.11', '3.12']
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: 'pip'
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Verify Dataset Integrity
+        run: |
+          python -c "import json; data=json.load(open('rawiai/data/asas_al_balagha.json')); assert len(data) >= 20, 'Asas Al-Balagha dataset corrupted'"
+          python -c "import json; data=json.load(open('rawiai/data/golden_evaluation_dataset.json')); assert len(data) >= 10, 'Golden evaluation dataset corrupted'"
+
+      - name: Run Pytest Suite
+        run: |
+          pytest -v --durations=10
+
+  evaluation-benchmark:
+    name: Evaluation & Benchmark Runner
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run Benchmark & DeepEval Suite
+        run: |
+          python run_evaluation.py
+
+      - name: Smoke Test NLP & Dual-RAG Demos
+        run: |
+          python demo_nlp.py
+          python demo_dual_rag.py

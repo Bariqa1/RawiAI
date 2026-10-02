@@ -1,5 +1,9 @@
 # RawiAI - Advanced Hybrid RAG for Arabic Poetry
 
+[![CI/CD Pipeline](https://github.com/Bariqa1/RawiAI/actions/workflows/ci.yml/badge.svg)](https://github.com/Bariqa1/RawiAI/actions/workflows/ci.yml)
+[![Python 3.10 | 3.11 | 3.12](https://img.shields.io/badge/Python-3.10%20%7C%203.11%20%7C%203.12-blue.svg)](https://www.python.org/)
+[![Evaluation DeepEval](https://img.shields.io/badge/Evaluation-DeepEval-success.svg)](https://github.com/confident-ai/deepeval)
+[![License MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 ### Dual-Index Multi-Hop RAG & Domain-Specific NLP for Classical Arabic Poetry
 #### Grounded by Asas Al-Balagha (Al-Zamakhshari) and Evaluated via DeepEval
