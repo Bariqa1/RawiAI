@@ -37,8 +37,12 @@ htmlcov/
 .vscode/
 .idea/
 
-# Large model weights or embedding binaries (if any)
+# Large model weights, embedding binaries & raw book PDFs
 *.npy
 *.npz
 *.faiss
 *.index
+*.pdf
+
+# Raw text dumps & corpora
+rawiai/data/*_full.txt
