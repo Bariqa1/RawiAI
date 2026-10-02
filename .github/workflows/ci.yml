@@ -32,7 +32,7 @@ jobs:
 
       - name: Check Python Syntax (Byte-compile)
         run: |
-          python -m compileall rawiai tests demo_nlp.py demo_dual_rag.py run_evaluation.py
+          python -m compileall rawiai tests demo_nlp.py demo_dual_rag.py demo_poetic_council.py run_evaluation.py
 
       - name: Lint with Flake8
         run: |
@@ -102,3 +102,4 @@ jobs:
         run: |
           python demo_nlp.py
           python demo_dual_rag.py
+          python demo_poetic_council.py

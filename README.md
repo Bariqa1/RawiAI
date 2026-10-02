@@ -117,18 +117,30 @@ RawiAI/
 │   │   ├── prosody.py              # Arud meter classifier and Rawiyy extractor
 │   │   └── lexicon.py              # Heritage vocabulary annotator
 │   ├── rag/
-│   │   ├── lexicon_retriever.py    # Hybrid sparse BM25 and exact root retriever
+│   ├── rag/
+│   │   ├── lexicon_retriever.py    # Hybrid sparse BM25 and exact root retriever (3,719 roots)
 │   │   └── dual_rag_orchestrator.py # Multi-hop coordinator and prompt assembler
+│   ├── agents/
+│   │   ├── schemas.py              # Pydantic data models for agent contracts & critique reports
+│   │   ├── muse_agent.py           # The Muse: theme inference, meter & rhyme selection, rhetorical motifs
+│   │   ├── poet_agent.py           # The Poet: verse composition and cooperative revision
+│   │   ├── critic_agent.py         # Arud Critic: deterministic prosody verification & actionable critique
+│   │   └── poetic_council.py       # Council Orchestrator: iterative actor-critic refinement loop
 │   ├── evaluation/
 │   │   ├── metrics.py              # Custom DeepEval metrics (Faithfulness, Relevancy, Refusal)
 │   │   ├── deepeval_runner.py      # Dual runner (Deterministic Triad + Live LLM Judge)
 │   │   └── retrieval_benchmark.py  # Standalone retrieval benchmark (Hit@K, MRR)
 │   ├── data/
-│   │   ├── asas_al_balagha.json    # Indexed Asas Al-Balagha dictionary dataset
+│   │   ├── asas_al_balagha.json    # Gold standard Asas Al-Balagha dictionary dataset
+│   │   ├── asas_al_balagha_full.json # Complete digitized Asas Al-Balagha (3,719 roots, 2,018 metaphors)
+│   │   ├── asas_al_balagha_shamela_full.txt # Verified full text (35,599 lines, Al-Zamakhshari)
 │   │   └── golden_evaluation_dataset.json # Ground truth evaluation test suite
 │   └── processors/
-│       └── corpus_processor.py     # Automated dataset column detection and verse parser
-├── tests/                          # 46 automated unit and integration tests
+│       ├── corpus_processor.py     # Automated dataset column detection and verse parser
+│       └── asas_parser.py          # Shamela/OpenITI text parser & structured JSON builder
+├── tests/                          # 55 automated unit and integration tests
+│   ├── test_poetic_council.py      # Multi-Agent Poetic Council generation & critique tests
+│   ├── test_asas_parser.py         # Full book parser & dataset loading tests
 │   ├── test_deepeval_suite.py      # DeepEval CLI-native test file
 │   ├── test_evaluation.py          # Unit tests for benchmark and metric logic
 │   ├── test_asas_balagha.py        # Asas Al-Balagha retrieval tests
@@ -141,12 +153,36 @@ RawiAI/
 │   └── test_corpus_processor.py    # Data ingestion tests
 ├── demo_nlp.py                     # Interactive demo for NLP processing
 ├── demo_dual_rag.py                # Interactive demo for Dual-RAG multi-hop retrieval
+├── demo_poetic_council.py          # Interactive demo for Multi-Agent poem generation & critique
 ├── run_evaluation.py               # Main CLI benchmark and evaluation report generator
 ├── conftest.py                     # Test runner configuration and import path setup
 ├── .env.example                    # Environment variable template
 ├── .gitignore                      # Git configuration protecting secrets and cache
 ├── advanced-arabic-poetry-rag.ipynb # Original research notebook
 └── README.md                       # Project documentation
+```
+
+---
+
+## Multi-Agent Poetic Council (مجلس الشعراء ونظم الشعر الآلي)
+
+RawiAI features an autonomous **Multi-Agent Poetic Council** operating in an **Actor-Critic Self-Correction Loop**:
+
+1. **The Muse Agent (عميل الإلهام وبلاغة المعجم):**
+   - Infers poetic theme (فخر، حكمة، غزل، معاصرة وتقنية...).
+   - Selects the ideal classical meter (`الكامل`, `الطويل`, `البسيط`) and rhyme letter (`الروي`).
+   - Retrieves rare rhetorical metaphors and motifs from *Asas Al-Balagha* to seed into the composition.
+2. **The Poet Agent (الشاعر الناظم):**
+   - Composes symmetrical hemistich verses (*Sadr* and *Ajuz*) weaving the rhetorical motifs into the target meter.
+3. **The Arud Critic Agent (الناقد العروضي ومحكم الشعر العربي):**
+   - Audits every verse using deterministic prosodic analysis (`ProsodyAnalyzer`).
+   - Verifies metric adherence, detects feet irregularities, checks rawiyy consonant matching, and tests syllabic symmetry.
+   - If a verse is broken, sends actionable revision directives back to the Poet Agent until the poem achieves 100% balance.
+
+```bash
+# Run the interactive Multi-Agent Council demo
+python3 demo_poetic_council.py
+```
 ```
 
 ---
