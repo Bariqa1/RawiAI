@@ -236,7 +236,7 @@ python3 run_evaluation.py --live
 deepeval test run tests/test_deepeval_suite.py
 ```
 
-### Run All 46 Unit Tests via Pytest
+### Run All 69 Unit Tests via Pytest
 ```bash
 pytest tests
 ```
@@ -246,11 +246,19 @@ python3 -m unittest discover tests
 ```
 
 ### Run Interactive Demos
-- Dual-RAG Multi-Hop Pipeline:
+- **Master Orchestrator & Guardrails Showcase (المايسترو الموحد وحواجز الأمان):**
+  ```bash
+  python3 demo_master_orchestrator.py
+  ```
+- **Multi-Agent Poetic Council Showcase (مجلس الشعراء التفاعلي):**
+  ```bash
+  python3 demo_poetic_council.py
+  ```
+- **Dual-RAG Multi-Hop Pipeline:**
   ```bash
   python3 demo_dual_rag.py
   ```
-- Domain NLP & Prosody Analysis:
+- **Domain NLP & Prosody Analysis:**
   ```bash
   python3 demo_nlp.py
   ```

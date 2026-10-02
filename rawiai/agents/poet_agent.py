@@ -56,10 +56,11 @@ class PoetAgent:
         }
     }
 
-    def __init__(self, api_key: Optional[str] = None):
+    def __init__(self, api_key: Optional[str] = None, use_llm: bool = False):
+        self.use_llm = use_llm or (os.environ.get("USE_LIVE_LLM", "").lower() in ["1", "true", "yes"])
         self.api_key = api_key or os.environ.get("OPENAI_API_KEY") or os.environ.get("GEMINI_API_KEY")
         self.client = None
-        if self.api_key and os.environ.get("OPENAI_API_KEY"):
+        if self.use_llm and self.api_key and os.environ.get("OPENAI_API_KEY"):
             try:
                 from openai import OpenAI
                 self.client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))

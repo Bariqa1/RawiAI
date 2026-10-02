@@ -87,6 +87,8 @@ class GeneratedPoem(BaseModel):
     critique_report: CouncilCritiqueReport
     metaphor_sources: List[Dict[str, Any]] = Field(default_factory=list)
     full_text: str = ""
+    safety_passed: bool = True
+    safety_notes: Optional[str] = None
 
     def format_display(self) -> str:
         """Pretty-printed classical Arabic layout for display."""

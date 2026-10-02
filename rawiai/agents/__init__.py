@@ -15,6 +15,7 @@ from rawiai.agents.muse_agent import MuseAgent
 from rawiai.agents.poet_agent import PoetAgent
 from rawiai.agents.critic_agent import ArudCriticAgent
 from rawiai.agents.poetic_council import PoeticCouncil
+from rawiai.agents.guardrails import PoeticGuardrails, GuardrailCheckResult
 
 __all__ = [
     "PoemCompositionRequest",
@@ -27,5 +28,7 @@ __all__ = [
     "MuseAgent",
     "PoetAgent",
     "ArudCriticAgent",
-    "PoeticCouncil"
+    "PoeticCouncil",
+    "PoeticGuardrails",
+    "GuardrailCheckResult"
 ]

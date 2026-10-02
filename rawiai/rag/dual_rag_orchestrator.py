@@ -30,6 +30,41 @@ class DualRAGOrchestrator:
         """Sets or updates indexed poetry records."""
         self.poetry_records = records
 
+    def retrieve_poetry(self, query: str, top_k: int = 3) -> List[EnrichedVerse]:
+        """
+        Retrieves matching poetry records from self.poetry_records based on lexical overlap.
+        """
+        if not self.poetry_records:
+            return []
+
+        clean_q = self.clean_search_query(query)
+        norm_q = ArabicNormalizer.normalize_search(clean_q)
+        q_tokens = set(norm_q.split())
+
+        scored = []
+        for verse in self.poetry_records:
+            score = 0.0
+            norm_verse = verse.normalized_search or ArabicNormalizer.normalize_search(verse.original_text)
+
+            # Exact substring match
+            if norm_q in norm_verse:
+                score += 10.0
+
+            # Token overlap
+            v_tokens = set(norm_verse.split())
+            overlap = len(q_tokens & v_tokens)
+            score += overlap * 2.0
+
+            # Poet match
+            if verse.poet and ArabicNormalizer.normalize_search(verse.poet) in norm_q:
+                score += 5.0
+
+            if score > 0:
+                scored.append((score, verse))
+
+        scored.sort(key=lambda x: x[0], reverse=True)
+        return [item[1] for item in scored[:top_k]]
+
     def classify_intent(self, query: str) -> str:
         """
         Classifies user query into one of four task categories:
