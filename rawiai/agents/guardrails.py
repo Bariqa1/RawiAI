@@ -38,6 +38,44 @@ class PoeticGuardrails:
         r"(hack|exploit|sql injection|payload)"
     ]
 
+    # Cybersecurity: SQL Injection Detection Patterns (الكشف عن هجمات حقن قواعد البيانات)
+    SQLI_PATTERNS = [
+        r"(union\s+(all\s+)?select)",
+        r"(select\s+[\w\*,\s]+\s+from\s+[\w\.]+)",
+        r"(insert\s+into\s+[\w\.]+(\s*\(.*?\))?\s*values)",
+        r"(delete\s+from\s+[\w\.]+)",
+        r"(drop\s+(table|database|view|schema|procedure))",
+        r"(alter\s+table\s+[\w\.]+)",
+        r"(truncate\s+table\s+[\w\.]+)",
+        r"(exec\s*\(|execute\s*\(|xp_cmdshell|sp_executesql)",
+        r"('|\")\s*(or|and)\s*('|\")?\d+('|\")?\s*=\s*('|\")?\d+",
+        r"('|\")\s*(or|and)\s*('|\")[a-z0-9_]+('|\")?\s*=\s*('|\")[a-z0-9_]+",
+        r"(;|--|\/\*|\*\/)\s*(drop|select|union|insert|delete|update|sleep|benchmark)",
+        r"(sleep\s*\(\s*\d+\s*\)|benchmark\s*\(\s*\d+)",
+    ]
+
+    # Cybersecurity: Prompt Injection & AI Jailbreak Patterns (حقن الأوامر وتجاوز التعليمات)
+    PROMPT_INJECTION_PATTERNS = [
+        r"(ignore\s+(all\s+)?(previous|prior)\s+(instructions|prompts|rules|commands))",
+        r"(تجاهل\s+(كافة|جميع)?\s*(التعليمات|الأوامر|القواعد|الضوابط)\s*(السابقة)?)",
+        r"(انس\s+(كل|جميع)?\s*(ما\s+سبق|التعليمات|الأوامر))",
+        r"(system\s+prompt|البرومبت\s+(الأصلي|السري|الداخلي))",
+        r"(you\s+are\s+now\s+(unrestricted|in\s+developer\s+mode|dan\s+mode)|وضع\s+المطور)",
+        r"(bypass\s+safety|تجاوز\s+(حواجز|معايير)\s+(الأمان|السلامة))",
+        r"(reveal\s+(your\s+)?(instructions|secret\s+key|api\s+key|tokens))",
+        r"(اعطني\s+مفتاح\s+(الـ\s*api|api\s*key|النظام))"
+    ]
+
+    # Cybersecurity: Command Injection & Script/XSS (حقن السكربتات وأوامر النظام)
+    CODE_INJECTION_PATTERNS = [
+        r"(<\s*script\b[^>]*>.*?<\s*/\s*script\s*>|<\s*script\b[^>]*>)",
+        r"(javascript\s*:)",
+        r"(onerror\s*=|onload\s*=|onclick\s*=)",
+        r"(;\s*(rm\s+-rf|del\s+|format\s+|shutdown|curl|wget))",
+        r"(\$\([^)]+\)|\`[^`]+\`)",
+        r"(\.\./|\.\.\\)"
+    ]
+
     @classmethod
     def inspect_input(cls, request_or_topic: str) -> GuardrailCheckResult:
         """
@@ -55,7 +93,37 @@ class PoeticGuardrails:
                 remediation_message="يرجى كتابة موضوع أو فكرة محددة لنظم الأبيات حولها."
             )
 
-        # 2. Language check (Must contain Arabic characters)
+        # 2. Cybersecurity: SQL Injection detection (حقن قواعد البيانات)
+        for pattern in cls.SQLI_PATTERNS:
+            if re.search(pattern, text, re.IGNORECASE):
+                return GuardrailCheckResult(
+                    passed=False,
+                    risk_level="high",
+                    reason="رصد محاولة حقن استعلامات أو هجوم سيبراني (SQL Injection).",
+                    remediation_message="عذراً، تم حظر هذا الطلب لاحتوائه على تراكيب مشبوهة بحقن قواعد البيانات (SQLi)."
+                )
+
+        # 3. Cybersecurity: Prompt Injection & Jailbreak (تجاوز تعليمات النموذج)
+        for pattern in cls.PROMPT_INJECTION_PATTERNS:
+            if re.search(pattern, text, re.IGNORECASE):
+                return GuardrailCheckResult(
+                    passed=False,
+                    risk_level="high",
+                    reason="رصد محاولة حقن أوامر وتجاوز لتعليمات النموذج (Prompt Injection / Jailbreak).",
+                    remediation_message="عذراً، لا يُسمح بتجاوز تعليمات النظام أو التلاعب بالضوابط التوجيهية للذكاء الاصطناعي."
+                )
+
+        # 4. Cybersecurity: Script & Command Injection / XSS (حقن السكربتات وأوامر النظام)
+        for pattern in cls.CODE_INJECTION_PATTERNS:
+            if re.search(pattern, text, re.IGNORECASE):
+                return GuardrailCheckResult(
+                    passed=False,
+                    risk_level="high",
+                    reason="رصد محاولة حقن سكربتات أو أوامر نظام (Code/Command Injection).",
+                    remediation_message="عذراً، يقتصر مجلس الرواة على النصوص الأدبية، وتم حجب الرموز والسكربتات المشبوهة."
+                )
+
+        # 5. Language check (Must contain Arabic characters)
         if not ArabicNormalizer.has_arabic(text):
             return GuardrailCheckResult(
                 passed=False,
