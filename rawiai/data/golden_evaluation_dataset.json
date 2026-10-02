@@ -1,0 +1,92 @@
+[
+  {
+    "id": "TC01",
+    "query": "ما معنى حَكِّم سُيُوفَكَ في رِقَابِ العُذَّلِ؟",
+    "intent": "meaning",
+    "target_verse_substring": "حكم سيوفك في رقاب العذل",
+    "expected_poet": "عنترة بن شداد",
+    "ground_truth": "يمضي الشاعر في شجاعته وعزيمته قاطعاً ألسنة اللائمين (العُذَّل) بسيفه، مؤكداً أنه لا يبالي باللوم والعذل في طلب العزة والمجد.",
+    "expected_lexicon_roots": ["عذل", "سيف"]
+  },
+  {
+    "id": "TC02",
+    "query": "من قائل: الخيل والليل والبيداء تعرفني؟",
+    "intent": "author",
+    "target_verse_substring": "الخيل والليل والبيداء تعرفني",
+    "expected_poet": "أبو الطيب المتنبي",
+    "ground_truth": "أبو الطيب المتنبي",
+    "expected_lexicon_roots": []
+  },
+  {
+    "id": "TC03",
+    "query": "أكمل: قفا نبك من ذكرى حبيب ومنزل",
+    "intent": "completion",
+    "target_verse_substring": "قفا نبك من ذكرى حبيب ومنزل",
+    "expected_poet": "امرؤ القيس",
+    "ground_truth": "بِسِقْطِ اللِّوَى بَيْنَ الدَّخُولِ فَحَوْمَلِ",
+    "expected_lexicon_roots": []
+  },
+  {
+    "id": "TC04",
+    "query": "اشرح المجاز والبلاغة في: الخيل والليل والبيداء تعرفني",
+    "intent": "meaning",
+    "target_verse_substring": "الخيل والليل والبيداء تعرفني",
+    "expected_poet": "أبو الطيب المتنبي",
+    "ground_truth": "استعارة مكنية حيث جعل الشاعر الجمادات (الليل، البيداء) والحيوان (الخيل) أشخاصاً عقلاء يعرفونه ويشهدون له بالفروسية والشجاعة والثبات، والبيداء الصحراء التي تبيد سالكها.",
+    "expected_lexicon_roots": ["بيد", "خيل", "سيف"]
+  },
+  {
+    "id": "TC05",
+    "query": "أريد بيتاً لعنترة عن الشجاعة ومغادرة دار الهوان",
+    "intent": "search",
+    "target_verse_substring": "وإذا نزلت بدار ذل فارحل",
+    "expected_poet": "عنترة بن شداد",
+    "ground_truth": "حكم سيوفك في رقاب العذل ... وإذا نزلت بدار ذل فارحل",
+    "expected_lexicon_roots": []
+  },
+  {
+    "id": "TC06",
+    "query": "ما معنى كلمة القسطل في قول عنترة: أو مت كريماً تحت ظل القسطل؟",
+    "intent": "meaning",
+    "target_verse_substring": "أو مت كريما تحت ظل القسطل",
+    "expected_poet": "عنترة بن شداد",
+    "ground_truth": "القسطل هو غبار المعركة الكثيف المثار من حوافر الخيل، وظل القسطل كناية عن ساحة الحرب واشتعال القتال.",
+    "expected_lexicon_roots": ["قسطل"]
+  },
+  {
+    "id": "TC07",
+    "query": "من قائل: إذا المرء لم يدنس من اللؤم عرضه؟",
+    "intent": "author",
+    "target_verse_substring": "إذا المرء لم يدنس من اللؤم عرضه",
+    "expected_poet": "السموأل",
+    "ground_truth": "السموأل",
+    "expected_lexicon_roots": []
+  },
+  {
+    "id": "TC08",
+    "query": "أكمل البيت: ألا هبي بصحنك فاصبحينا",
+    "intent": "completion",
+    "target_verse_substring": "ألا هبي بصحنك فاصبحينا",
+    "expected_poet": "عمرو بن كلثوم",
+    "ground_truth": "وَلاَ تُبْقِي خُمُورَ الأَنْدَرِينَا",
+    "expected_lexicon_roots": []
+  },
+  {
+    "id": "TC09",
+    "query": "ما هي الأبيات التي كتبها المتنبي عن ركوب الطائرات والسفر بالفضاء؟",
+    "intent": "search",
+    "target_verse_substring": null,
+    "expected_poet": null,
+    "ground_truth": "المعلومة المطلوبة غير متوفرة في قاعدة بيانات الشعر.",
+    "expected_lexicon_roots": []
+  },
+  {
+    "id": "TC10",
+    "query": "من الشاعر القائل: هذه عبارة وهمية معاصرة تماماً وغير موجودة في التراث؟",
+    "intent": "author",
+    "target_verse_substring": null,
+    "expected_poet": null,
+    "ground_truth": "المعلومة المطلوبة غير متوفرة في قاعدة بيانات الشعر.",
+    "expected_lexicon_roots": []
+  }
+]

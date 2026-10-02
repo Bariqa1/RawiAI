@@ -1,0 +1,6 @@
+pydantic>=2.0.0
+deepeval>=2.9.0
+pytest>=8.0.0
+python-dotenv>=1.0.0
+openai>=1.0.0
+pandas>=1.5.0
