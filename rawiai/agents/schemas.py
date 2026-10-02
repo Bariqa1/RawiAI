@@ -14,6 +14,7 @@ class PoeticTheme(str):
     WASF = "وصف وطبيعة"
     RITHA = "رثاء وشجن"
     MODERN = "معاصرة وتقنية بلسان كلاسيكي"
+    BIRR = "بر الوالدين ووجدان الأمومة"
 
 
 class PoemCompositionRequest(BaseModel):

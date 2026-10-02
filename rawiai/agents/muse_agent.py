@@ -41,7 +41,8 @@ class MuseAgent:
         PoeticTheme.FAKHR: ["شجاعة", "سيف", "فروسية", "خيل", "وغى", "حرب", "بأس", "عزيمة", "فخر", "مجد", "صمود"],
         PoeticTheme.HIKMA: ["حكمة", "زمان", "دهر", "عقل", "صبر", "حق", "عدل", "تأمل", "نصيحة", "دنيا"],
         PoeticTheme.GHAZAL: ["حب", "شوق", "حنين", "غرام", "دمع", "فراق", "قلب", "هوى", "جمال"],
-        PoeticTheme.WASF: ["طبيعة", "صحراء", "مطر", "نجوم", "ليل", "بيداء", "جبل", "سماء"]
+        PoeticTheme.WASF: ["طبيعة", "صحراء", "مطر", "نجوم", "ليل", "بيداء", "جبل", "سماء"],
+        PoeticTheme.BIRR: ["ام", "امي", "والدة", "والدتي", "والدين", "اب", "ابي", "حنان", "عطف", "بر", "امومة", "رضا", "مهد"]
     }
 
     def __init__(self, lexicon_retriever: Optional[AsasLexiconRetriever] = None):
@@ -65,7 +66,7 @@ class MuseAgent:
         if user_meter and user_meter in self.METERS_REGISTRY:
             return user_meter
 
-        if theme == PoeticTheme.MODERN:
+        if theme in [PoeticTheme.MODERN, PoeticTheme.BIRR]:
             return "الكامل"
         elif theme == PoeticTheme.HIKMA:
             return "البسيط"
@@ -91,6 +92,8 @@ class MuseAgent:
             search_terms = ["سيف", "خيل", "بيد", "مجد", "صمصام"]
         elif theme == PoeticTheme.HIKMA:
             search_terms = ["عقل", "صبر", "دهر", "حزم", "بصر"]
+        elif theme == PoeticTheme.BIRR:
+            search_terms = ["برر", "عطف", "نور", "كرم"]
         else:
             search_terms = ["شوق", "ليل", "بدر", "صبح"]
 
