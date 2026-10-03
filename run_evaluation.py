@@ -5,13 +5,15 @@ Executes end-to-end evaluation covering both Retrieval Metrics (Hit@K, MRR)
 and Generation Reliability (Faithfulness, Answer Relevancy) over the Golden Dataset.
 """
 
+import os
+import json
 import sys
 import warnings
 
 # Suppress external library SSL/auth deprecation warnings in terminal
 warnings.filterwarnings("ignore")
 
-from rawiai.models.schemas import EnrichedVerse
+from rawiai.models.schemas import EnrichedVerse, ProsodyInfo
 from rawiai.processors.corpus_processor import PoetryCorpusProcessor
 from rawiai.rag.dual_rag_orchestrator import DualRAGOrchestrator
 from rawiai.evaluation.retrieval_benchmark import RetrievalBenchmark
@@ -25,9 +27,42 @@ def print_header(title: str):
 
 
 def build_evaluation_corpus():
-    """Builds a verified indexed test corpus using PoetryCorpusProcessor."""
+    """Loads the verified 38-verse classical corpus covering 15 classical poets."""
+    corpus_path = os.path.join(
+        os.path.dirname(__file__), "rawiai", "data", "classical_poetry_corpus.json"
+    )
+    if os.path.exists(corpus_path):
+        with open(corpus_path, "r", encoding="utf-8") as f:
+            raw_data = json.load(f)
+        corpus = []
+        for item in raw_data:
+            p = item.get("prosody", {})
+            prosody = ProsodyInfo(
+                phonetic_sadr="",
+                phonetic_ajuz="",
+                meter=p.get("meter", "غير محدد"),
+                meter_confidence=p.get("confidence", 0.9),
+                rhyme_letter=p.get("rhyme_letter", "")
+            )
+            v = EnrichedVerse(
+                id=item.get("id", "verse_1"),
+                original_text=item.get("original_text", ""),
+                sadr=item.get("sadr", ""),
+                ajuz=item.get("ajuz", ""),
+                poet=item.get("poet", ""),
+                era=item.get("era", ""),
+                theme=item.get("theme", ""),
+                poem_title=item.get("poem_title", ""),
+                normalized_search=item.get("normalized_search", ""),
+                stemmed_tokens=item.get("stemmed_tokens", []),
+                prosody=prosody,
+                difficult_words=item.get("difficult_words", []),
+                source_row=item.get("source_row")
+            )
+            corpus.append(v)
+        return corpus
+
     processor = PoetryCorpusProcessor()
-    
     raw_samples = [
         {
             "text": "حَكِّمْ سُيُوفَكَ فِي رِقَابِ العُذَّلِ ... وَإِذَا نَزَلْتَ بِدَارِ ذُلٍّ فَارْحَلِ",
@@ -42,37 +77,8 @@ def build_evaluation_corpus():
             "era": "عباسي",
             "theme": "فخر واعتداد بالنفس وشجاعة",
             "title": "وا حر قلباه"
-        },
-        {
-            "text": "قِفَا نَبْكِ مِنْ ذِكْرَى حَبِيبٍ وَمَنْزِلِ ... بِسِقْطِ اللِّوَى بَيْنَ الدَّخُولِ فَحَوْمَلِ",
-            "poet": "امرؤ القيس",
-            "era": "جاهلي",
-            "theme": "غزل ووقوف على الأطلال",
-            "title": "معلقة امرئ القيس"
-        },
-        {
-            "text": "واختر لنفسك منزلاً تعلو به ... أو مت كريماً تحت ظل القسطلِ",
-            "poet": "عنترة بن شداد",
-            "era": "جاهلي",
-            "theme": "عزة وشجاعة وإقدام",
-            "title": "ديوان عنترة"
-        },
-        {
-            "text": "إِذَا المَرْءُ لَمْ يَدْنَسْ مِنَ اللُّؤْمِ عِرْضُهُ ... فَكُلُّ رِدَاءٍ يَرْتَدِيهِ جَمِيلُ",
-            "poet": "السموأل",
-            "era": "جاهلي",
-            "theme": "حكمة ومروءة وشرف",
-            "title": "لامية السموأل"
-        },
-        {
-            "text": "أَلاَ هُبِّي بِصَحْنِكِ فَاصْبَحِينَا ... وَلاَ تُبْقِي خُمُورَ الأَنْدَرِينَا",
-            "poet": "عمرو بن كلثوم",
-            "era": "جاهلي",
-            "theme": "فخر وحماسة",
-            "title": "معلقة عمرو بن كلثوم"
         }
     ]
-
     corpus = []
     for s in raw_samples:
         rec = processor.process_verse_text(
@@ -118,7 +124,7 @@ def main():
     print_header("[2] Generation Reliability & DeepEval Evaluation")
     use_live = "--live" in sys.argv
     deepeval_runner = DeepEvalRunner(orchestrator)
-    eval_res = deepeval_runner.run_evaluation(max_cases=10, use_live_api=use_live)
+    eval_res = deepeval_runner.run_evaluation(max_cases=50, use_live_api=use_live)
 
     print(f"- Evaluation Mode          : {eval_res['mode']}")
     print(f"- Evaluated Test Cases     : {eval_res['evaluated_cases']}")

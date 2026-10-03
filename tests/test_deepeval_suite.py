@@ -15,6 +15,7 @@ from typing import Dict, Any
 from deepeval import assert_test
 from deepeval.test_case import LLMTestCase
 
+from rawiai.models.schemas import EnrichedVerse, ProsodyInfo
 from rawiai.processors.corpus_processor import PoetryCorpusProcessor
 from rawiai.rag.dual_rag_orchestrator import DualRAGOrchestrator
 from rawiai.evaluation.deepeval_runner import DeepEvalRunner
@@ -26,63 +27,39 @@ from rawiai.evaluation.metrics import (
 
 
 def _init_orchestrator_and_runner():
-    processor = PoetryCorpusProcessor()
-    raw_samples = [
-        {
-            "text": "حَكِّمْ سُيُوفَكَ فِي رِقَابِ العُذَّلِ ... وَإِذَا نَزَلْتَ بِدَارِ ذُلٍّ فَارْحَلِ",
-            "poet": "عنترة بن شداد",
-            "era": "جاهلي",
-            "theme": "شجاعة وفخر وعزة",
-            "title": "معلقة عنترة"
-        },
-        {
-            "text": "الخَيْلُ وَاللَّيْلُ وَالبَيْدَاءُ تَعْرِفُنِي # وَالسَّيْفُ وَالرُّمْحُ وَالقِرْطَاسُ وَالقَلَمُ",
-            "poet": "أبو الطيب المتنبي",
-            "era": "عباسي",
-            "theme": "فخر واعتداد بالنفس وشجاعة",
-            "title": "وا حر قلباه"
-        },
-        {
-            "text": "قِفَا نَبْكِ مِنْ ذِكْرَى حَبِيبٍ وَمَنْزِلِ ... بِسِقْطِ اللِّوَى بَيْنَ الدَّخُولِ فَحَوْمَلِ",
-            "poet": "امرؤ القيس",
-            "era": "جاهلي",
-            "theme": "غزل ووقوف على الأطلال",
-            "title": "معلقة امرئ القيس"
-        },
-        {
-            "text": "واختر لنفسك منزلاً تعلو به ... أو مت كريماً تحت ظل القسطلِ",
-            "poet": "عنترة بن شداد",
-            "era": "جاهلي",
-            "theme": "عزة وشجاعة وإقدام",
-            "title": "ديوان عنترة"
-        },
-        {
-            "text": "إِذَا المَرْءُ لَمْ يَدْنَسْ مِنَ اللُّؤْمِ عِرْضُهُ ... فَكُلُّ رِدَاءٍ يَرْتَدِيهِ جَمِيلُ",
-            "poet": "السموأل",
-            "era": "جاهلي",
-            "theme": "حكمة ومروءة وشرف",
-            "title": "لامية السموأل"
-        },
-        {
-            "text": "أَلاَ هُبِّي بِصَحْنِكِ فَاصْبَحِينَا ... وَلاَ تُبْقِي خُمُورَ الأَنْدَرِينَا",
-            "poet": "عمرو بن كلثوم",
-            "era": "جاهلي",
-            "theme": "فخر وحماسة",
-            "title": "معلقة عمرو بن كلثوم"
-        }
-    ]
-
-    corpus = []
-    for s in raw_samples:
-        rec = processor.process_verse_text(
-            raw_text=s["text"],
-            poet=s["poet"],
-            era=s["era"],
-            theme=s["theme"],
-            poem_title=s["title"]
-        )
-        if rec:
-            corpus.append(rec)
+    corpus_path = os.path.join(
+        os.path.dirname(os.path.dirname(__file__)),
+        "rawiai", "data", "classical_poetry_corpus.json"
+    )
+    if os.path.exists(corpus_path):
+        with open(corpus_path, "r", encoding="utf-8") as f:
+            raw_data = json.load(f)
+        corpus = []
+        for item in raw_data:
+            p = item.get("prosody", {})
+            prosody = ProsodyInfo(
+                meter=p.get("meter", "غير محدد"),
+                confidence=p.get("confidence", 0.9),
+                rhyme_letter=p.get("rhyme_letter", "")
+            )
+            v = EnrichedVerse(
+                id=item.get("id", "verse_1"),
+                original_text=item.get("original_text", ""),
+                sadr=item.get("sadr", ""),
+                ajuz=item.get("ajuz", ""),
+                poet=item.get("poet", ""),
+                era=item.get("era", ""),
+                theme=item.get("theme", ""),
+                poem_title=item.get("poem_title", ""),
+                normalized_search=item.get("normalized_search", ""),
+                stemmed_tokens=item.get("stemmed_tokens", []),
+                prosody=prosody,
+                difficult_words=item.get("difficult_words", []),
+                source_row=item.get("source_row")
+            )
+            corpus.append(v)
+    else:
+        corpus = []
 
     orchestrator = DualRAGOrchestrator(poetry_records=corpus)
     runner = DeepEvalRunner(orchestrator)

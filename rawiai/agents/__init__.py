@@ -9,12 +9,15 @@ from rawiai.agents.schemas import (
     VerseCritique,
     CouncilCritiqueReport,
     GeneratedPoem,
-    PoeticTheme
+    PoeticTheme,
+    SingleVerseEvaluation,
+    PoeticEvaluationReport
 )
 from rawiai.agents.muse_agent import MuseAgent
 from rawiai.agents.poet_agent import PoetAgent
 from rawiai.agents.critic_agent import ArudCriticAgent
 from rawiai.agents.poetic_council import PoeticCouncil
+from rawiai.agents.evaluator_agent import HumanPoetryEvaluator
 from rawiai.agents.guardrails import PoeticGuardrails, GuardrailCheckResult
 
 __all__ = [
@@ -25,10 +28,13 @@ __all__ = [
     "CouncilCritiqueReport",
     "GeneratedPoem",
     "PoeticTheme",
+    "SingleVerseEvaluation",
+    "PoeticEvaluationReport",
     "MuseAgent",
     "PoetAgent",
     "ArudCriticAgent",
     "PoeticCouncil",
+    "HumanPoetryEvaluator",
     "PoeticGuardrails",
     "GuardrailCheckResult"
 ]

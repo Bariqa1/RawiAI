@@ -12,6 +12,12 @@ from rawiai.agents.schemas import VerseDraft, MuseInspiration, CouncilCritiqueRe
 from rawiai.nlp.normalizer import ArabicNormalizer
 from rawiai.nlp.segmenter import VerseSegmenter
 
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+except Exception:
+    pass
+
 
 class PoetAgent:
     """Creative verse composition and revision engine."""
@@ -38,6 +44,11 @@ class PoetAgent:
                 ("أُمِّي رِيَاضُ الحُبِّ نَبْعُ حَنَانِنَا", "فِي فَيْئِهَا نَلْقَى الأَمَانَ وَنَسْتَظِلْ"),
                 ("حَمَلَتْ فُؤَادِي فِي الشَّدَائِدِ رَحْمَةً", "تَسْقِي حَيَاتِي بِالوِدَادِ وَتَشْتَمِلْ"),
                 ("نَفْدِي الرَّءُومَ بِكُلِّ غَالٍ عِنْدَنَا", "فَالجُودُ فِي كَفِّ الحَبِيبَةِ مُكْتَمِلْ")
+            ],
+            "وصف وطبيعة": [
+                ("قَدْ فَاحَ عِطْرُ الرَّوْضِ فِي إِشْرَاقِهِ", "وَاسْتَيْقَظَتْ بَيْنَ الغُصُونِ بَلاَبِلُ"),
+                ("وَالصَّفْوُ فِي كَأْسِ الصَّبَاحِ سَعَادَةٌ", "تَجْلُو الهُمُومَ عَنِ الفُؤَادِ وَتَشْمَلُ"),
+                ("قَهْوَى الصَّبَاحِ سَلِيلَةٌ لِصَفَائِنَا", "تَشْفِي النُّفُوسَ مِنَ العَنَاءِ وَتَفْضُلُ")
             ]
         },
         "الطويل": {
@@ -50,6 +61,16 @@ class PoetAgent:
                 ("إِذَا المَرْءُ لَمْ يَدْنَسْ مِنَ اللُّؤْمِ عِرْضُهُ", "فَكُلُّ رِدَاءٍ يَرْتَدِيهِ جَمِيلُ"),
                 ("وَإِنْ هُوَ لَمْ يَحْمِلْ عَلَى النَّفْسِ ضَيْمَهَا", "فَلَيْسَ إِلَى حُسْنِ الثَّنَاءِ سَبِيلُ"),
                 ("تَعِفُّ إِذَا مَا ضَاقَتِ الأَرْضُ بِالفَتَى", "وَتَصْبِرُ إِنْ نَابَ الزَّمَانَ جَلِيلُ")
+            ],
+            "بر الوالدين ووجدان الأمومة": [
+                ("أَحِنُّ إِلَى أُمِّي إِذَا جَنَّنِي الدُّجَى", "وَأَرْجُو رِضَاهَا فَهْوَ فِي الحَشْرِ مَوْئِلِي"),
+                ("لَقَدْ غَذَّتِ النَّفْسَ الكَرِيمَةَ بِالهُدَى", "وَفَاضَتْ بِعَطْفٍ كَالغَمَامِ المُهَلَّلِ"),
+                ("فَيَا رَبِّ بَارِكْ فِي مَدَى عُمْرِهَا وَزِدْ", "لَهَا مِنْ جَزِيلِ الفَضْلِ فِي كُلِّ مَنْزِلِ")
+            ],
+            "وصف وطبيعة": [
+                ("صَبَاحٌ بَدَا فِيهِ السُّرُورُ وَأَشْرَقَا", "وَفِنْجَانُ قَهْوٍ طَابَ ذَوْقاً وَرَاقَا"),
+                ("يَفُوحُ شَذَاهَا بِالعَبِيرِ كَأَنَّهَا", "سُلافَةُ صَفْوٍ لَمْ تُخَالِطْ نِفَاقَا"),
+                ("تُجَدِّدُ عَزْمَ المَرْءِ فِي كُلِّ بُكْرَةٍ", "وَتَجْلُو سَوَادَ الهَمِّ حِينَ تَلاَقَى")
             ]
         },
         "البسيط": {
@@ -57,19 +78,32 @@ class PoetAgent:
                 ("العِلْمُ يَجْلُو العَمَى عَنْ قَلْبِ صَاحِبِهِ", "كَمَا يُجَلِّي سَوَادَ الظُّلْمَةِ القَمَرُ"),
                 ("مَنْ جَادَ بِالمَالِ جَادَ النَّاسُ قَاطِبَةً", "إِلَيْهِ بِالوُدِّ وَانْقَادَتْ لَهُ الغِيَرُ"),
                 ("وَالدَّهْرُ دُولابُ إِقْبَالٍ وَمَنْقَصَةٍ", "يَبْنِي وَيَهْدِمُ مَا يَخْتَارُهُ القَدَرُ")
+            ],
+            "بر الوالدين ووجدان الأمومة": [
+                ("أُمِّي ضِيَاءُ حَيَاتِي وَهْيَ نُورُ دَمِي", "وَفَيْضُ جُودٍ مِنَ الرَّحْمَنِ مُنْسَكِبُ"),
+                ("فِي حِضْنِهَا نَشَأَتْ رُوحِي عَلَى كَرَمٍ", "وَكُلُّ خَيْرٍ أَتَى مِنْهَا لَهُ سَبَبُ"),
+                ("بِرُّ الرَّءُومِ جِهَادٌ طَابَ مَغْنَمُهُ", "يُهْدِي الجِنَانَ وَتُجْلَى عِنْدَهُ الكُرَبُ")
             ]
         }
     }
 
-    def __init__(self, api_key: Optional[str] = None, use_llm: bool = False):
-        self.use_llm = use_llm or (os.environ.get("USE_LIVE_LLM", "").lower() in ["1", "true", "yes"])
+    def __init__(self, api_key: Optional[str] = None, use_llm: bool = True):
         self.api_key = api_key or os.environ.get("OPENAI_API_KEY") or os.environ.get("GEMINI_API_KEY")
+        env_llm = os.environ.get("USE_LIVE_LLM", "").lower()
+        if env_llm in ["0", "false", "no"]:
+            self.use_llm = False
+        elif not use_llm:
+            self.use_llm = False
+        else:
+            self.use_llm = bool(self.api_key)
+
         self.client = None
-        if self.use_llm and self.api_key and os.environ.get("OPENAI_API_KEY"):
+        if self.use_llm and self.api_key:
             try:
                 from openai import OpenAI
-                self.client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
-            except Exception:
+                self.client = OpenAI(api_key=self.api_key)
+            except Exception as e:
+                print(f"[PoetAgent] Failed to init OpenAI client: {e}")
                 self.client = None
 
     def compose(self, inspiration: MuseInspiration, verse_count: int = 3) -> List[VerseDraft]:
@@ -110,35 +144,57 @@ class PoetAgent:
         return revised_draft
 
     def _call_llm_composition(self, inspiration: MuseInspiration, count: int) -> Optional[List[VerseDraft]]:
-        """Invokes OpenAI LLM with poetic constraints."""
+        """Invokes OpenAI LLM with strict poetic constraints, exemplars, and low temperature."""
+        exemplar_verse = ""
+        meter_pool = self.CLASSICAL_TEMPLATES.get(inspiration.selected_meter, {})
+        for theme_verses in meter_pool.values():
+            if theme_verses:
+                exemplar_verse = f"{theme_verses[0][0]} ... {theme_verses[0][1]}"
+                break
+
         system_prompt = (
-            "أنت شاعر عربي فحل خبير بعروض الخليل بن أحمد وبلاغة الزمخشري. "
-            f"مهمتك نظم {count} أبيات شعرية عمودية موزونة تماماً (صدر وعجز مفصولين بـ ' ... ') "
-            f"على بحر {inspiration.selected_meter} ({inspiration.selected_meter}) "
-            f"وقافية موحدة تنتهي بحرف الروي ({inspiration.selected_rhyme}). "
-            f"الغرض: {inspiration.theme}. "
-            "التزم بدقة تامة بسلامة الوزن العروضي وامتنع عن أي حشو أو كسر."
+            "أنت شاعر عربي فحل ومحكم خبير في بلاغة التراث وعروض الخليل بن أحمد.\n"
+            f"مهمتك نظم {count} أبيات شعرية عمودية فصيحة، رصينة، وموزونة تماماً (صدر وعجز مفصولين بـ ' ... ')\n"
+            f"على بحر {inspiration.selected_meter} (تفعيلاته لكل شطر: {inspiration.meter_tafail})\n"
+            f"وقافية موحدة تنتهي بحرف الروي ({inspiration.selected_rhyme}).\n"
+            f"الغرض الشعري: {inspiration.theme}.\n\n"
+            "ضوابط الصياغة والمنطق (إلزامية صارمة):\n"
+            "1. سلامة المنطق والمعنى: يجب أن تكون الأبيات منطقية، عذبة، ومترابطة وجدانياً مع الموضوع المطلوب. إياك والتشبيهات المتناقضة أو غير المعقولة (ممنوع القول بأن الأحجار تصدأ، أو تشبيه لسان الأخ بالسيف القاطع في الخصومة!). صب اهتمامك على جوهر الموضوع (المحبة، الوفاء، الأخوة، العقل، الحكمة).\n"
+            "2. طبيعة القافية والكلمات: اختر كلمات فصيحة، مألوفة، وجميلة لقافية كل بيت بما يخدم المعنى طبيعياً. ممنوع منعاً كلياً حشر كلمات شاذة أو مبتذلة أو غير لائقة لمجرد التقفيل بحرف الروي (مثل: العلل، خفل، زفل).\n"
+            "3. الوزن العروضي التام: طابق تفعيلات البحر بدقة تامة وبلا أي كسر.\n"
+            "4. كمال الجملة: ممنوع قطع الشطر عند حرف جر (مثل: على، في، من، إلى) أو أداة عطف أو اسم موصول؛ يجب أن يكون كل شطر جملة فصيحة تامة ومكتملة المعنى.\n"
+            "5. الشكل: ضع التشكيل الكامل بالحركات والسكنات على الكلمات لتأكيد الوزن الموسيقي.\n"
+            "6. الصيغة: كل بيت في سطر مستقل مفصولاً بثلاث نقاط: الصدر ... العجز\n"
+            "7. ممنوع كتابة أي مقدمات أو تحيات أو هوامش إطلاقاً؛ ابدأ فوراً بنص البيت الأول مباشرة."
         )
+        if exemplar_verse:
+            system_prompt += f"\n\nنموذج عروضي موزون على بحر {inspiration.selected_meter} للمحاكاة:\n{exemplar_verse}"
 
         user_prompt = (
             f"الموضوع المطلوب: {inspiration.topic}\n"
-            f"المجازات المقترحة للاستلهام من أساس البلاغة:\n"
+            "تنبيه حول الاستلهام: صب اهتمامك وإبداعك على جوهر الموضوع وعاطفته ومفرداته اللائقة به حصراً.\n"
         )
-        for m in inspiration.lexicon_metaphors:
-            user_prompt += f"- مادة {m['lemma']}: {m['metaphorical_meaning']}\n"
-        user_prompt += f"\nاكتب الأبيات فقط، كل بيت في سطر بصيغة: الصدر ... العجز"
+        if inspiration.lexicon_metaphors:
+            user_prompt += "شواهد معجمية للاستئناس البلاغي (اختيارية وغير ملزمة إن لم تخدم المعنى الطبيعي):\n"
+            for m in inspiration.lexicon_metaphors:
+                user_prompt += f"- مادة {m['lemma']}: {m['metaphorical_meaning']}\n"
+        user_prompt += f"\nانظم {count} أبيات مترابطة، بليغة، وموزونة تماماً الآن بالتشكيل التام."
 
         try:
+            model_name = os.environ.get("POET_LLM_MODEL", "gpt-4o")
             response = self.client.chat.completions.create(
-                model="gpt-4o-mini",
+                model=model_name,
                 messages=[
                     {"role": "system", "content": system_prompt},
                     {"role": "user", "content": user_prompt}
                 ],
-                temperature=0.7
+                temperature=0.2
             )
             text = response.choices[0].message.content or ""
-            return self._parse_verse_lines(text)
+            verses = self._parse_verse_lines(text)
+            if verses and len(verses) >= count:
+                return verses[:count]
+            return verses if verses else None
         except Exception:
             return None
 
@@ -148,20 +204,22 @@ class PoetAgent:
         critique: VerseCritique,
         inspiration: MuseInspiration
     ) -> Optional[VerseDraft]:
-        """Requests single verse metric repair from the LLM."""
+        """Requests single verse metric repair from the LLM with low temperature."""
         prompt = (
-            f"البيت التالي فيه خلل عروضي:\n"
+            f"البيت التالي فيه خلل عروضي أو نحوي:\n"
             f"{verse.full_verse}\n"
             f"ملاحظات الناقد العروضي: {critique.prosody_feedback}\n"
-            f"المطلوب: أعد صياغة هذا البيت فقط على بحر {inspiration.selected_meter} "
-            f"وروي ({inspiration.selected_rhyme}) ليكون موزوناً 100%.\n"
+            f"المطلوب: أعد صياغة هذا البيت فقط ليكون موزوناً 100% على بحر {inspiration.selected_meter} "
+            f"(تفعيلاته: {inspiration.meter_tafail}) "
+            f"وروي ({inspiration.selected_rhyme}) مع التشكيل التام بالحركات والالتزام بالنحو السليم واكتمال المعنى دون أي قطع في الكلام.\n"
             f"الرد بصيغة سطر واحد فقط: الصدر ... العجز"
         )
         try:
+            model_name = os.environ.get("POET_LLM_MODEL", "gpt-4o")
             response = self.client.chat.completions.create(
-                model="gpt-4o-mini",
+                model=model_name,
                 messages=[{"role": "user", "content": prompt}],
-                temperature=0.3
+                temperature=0.1
             )
             text = (response.choices[0].message.content or "").strip()
             parsed = self._parse_verse_lines(text)
@@ -172,18 +230,40 @@ class PoetAgent:
         return None
 
     def _parse_verse_lines(self, raw_text: str) -> List[VerseDraft]:
-        """Extracts structured verses from text containing Sadr ... Ajuz."""
+        """Extracts structured verses from text containing Sadr ... Ajuz or separators."""
         verses = []
         lines = [line.strip() for line in raw_text.split("\n") if line.strip()]
         counter = 1
 
+        conversational_markers = [
+            "إليك", "اليك", "تفضل", "أبيات", "ابيات", "قصيدة", "شعر", "بحر", "قافية", "ملاحظة"
+        ]
+
         for line in lines:
-            line_clean = re.sub(r"^\d+[\.\-\)]\s*", "", line)  # remove line numbering
-            if "..." in line_clean or "…" in line_clean:
-                sep = "..." if "..." in line_clean else "…"
-                parts = line_clean.split(sep, 1)
-                if len(parts) == 2 and len(parts[0].strip()) > 3 and len(parts[1].strip()) > 3:
-                    verses.append(VerseDraft.from_parts(counter, parts[0], parts[1]))
+            line_clean = re.sub(r"^[0-9٠-٩]+[\.\-\)\:\s]*", "", line).strip()  # remove line numbering
+            line_clean = re.sub(r"[\*\_]", "", line_clean).strip()
+            line_clean = re.sub(r"^(?:البيت\s*[0-9٠-٩]*\s*[:\-]\s*)", "", line_clean).strip()
+
+            # Skip conversational introductions and headers
+            if line_clean.endswith(":") and any(m in line_clean for m in conversational_markers):
+                continue
+            if any(line_clean.startswith(m) for m in ["إليك", "اليك", "تفضل", "هاك"]):
+                continue
+
+            # Split on common classical separators
+            parts = re.split(r"\s*(?:\.{3,}|…|#|/|\||\s-\s|\s—\s|\s؛\s)\s*", line_clean)
+            if len(parts) >= 2 and len(parts[0].strip()) > 3 and len(parts[1].strip()) > 3:
+                sadr_part = re.sub(r"^[0-9٠-٩]+[\.\-\)\:\s]*", "", parts[0].strip()).strip()
+                ajuz_part = re.sub(r"^[0-9٠-٩]+[\.\-\)\:\s]*", "", parts[1].strip()).strip()
+                verses.append(VerseDraft.from_parts(counter, sadr_part, ajuz_part))
+                counter += 1
+            else:
+                words = line_clean.split()
+                if len(words) >= 6 and not any(m in line_clean for m in conversational_markers):
+                    mid = len(words) // 2
+                    sadr = re.sub(r"^[0-9٠-٩]+[\.\-\)\:\s]*", "", " ".join(words[:mid])).strip()
+                    ajuz = re.sub(r"^[0-9٠-٩]+[\.\-\)\:\s]*", "", " ".join(words[mid:])).strip()
+                    verses.append(VerseDraft.from_parts(counter, sadr, ajuz))
                     counter += 1
 
         return verses

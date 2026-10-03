@@ -4,6 +4,8 @@ Coordinates between the Poetry RAG index and the 'Asas Al-Balagha' Lexicon RAG i
 performing Multi-Hop retrieval for in-depth literary explanations.
 """
 
+import os
+import json
 from typing import List, Dict, Optional, Any
 from rawiai.models.schemas import EnrichedVerse
 from rawiai.models.lexicon_schema import AsasEntry, LexiconSearchResult
@@ -18,12 +20,29 @@ class DualRAGOrchestrator:
     with Rhetorical Lexicon Retrieval (Asas Al-Balagha).
     """
 
+    DEFAULT_CORPUS_PATH = os.path.join(
+        os.path.dirname(os.path.dirname(__file__)),
+        "data",
+        "classical_poetry_corpus.json"
+    )
+
     def __init__(
         self,
         poetry_records: Optional[List[EnrichedVerse]] = None,
         lexicon_retriever: Optional[AsasLexiconRetriever] = None
     ):
-        self.poetry_records = poetry_records or []
+        if poetry_records:
+            self.poetry_records = poetry_records
+        elif os.path.exists(self.DEFAULT_CORPUS_PATH):
+            try:
+                with open(self.DEFAULT_CORPUS_PATH, "r", encoding="utf-8") as f:
+                    raw_data = json.load(f)
+                    self.poetry_records = [EnrichedVerse(**item) for item in raw_data]
+            except Exception:
+                self.poetry_records = []
+        else:
+            self.poetry_records = []
+
         self.lexicon_retriever = lexicon_retriever or AsasLexiconRetriever()
 
     def set_poetry_records(self, records: List[EnrichedVerse]):
@@ -39,7 +58,28 @@ class DualRAGOrchestrator:
 
         clean_q = self.clean_search_query(query)
         norm_q = ArabicNormalizer.normalize_search(clean_q)
-        q_tokens = set(norm_q.split())
+        if not norm_q or len(norm_q) < 2:
+            return []
+
+        arabic_stopwords = {
+            "في", "من", "عن", "مع", "على", "الى", "إلى", "ان", "أن", "إن",
+            "ما", "هو", "هي", "هل", "لا", "لم", "لن", "قد", "ثم", "أو", "او",
+            "ذا", "هذا", "هذه", "ذلك", "تلك", "الذي", "التي", "الذين", "كان", "كانت",
+            "شاعر", "الشاعر", "قائل", "القائل", "صاحب", "الصاحب", "بيت", "البيت", "شعر", "الشعر"
+        }
+
+        raw_tokens = norm_q.split()
+        meaningful_tokens = [t for t in raw_tokens if t not in arabic_stopwords and len(t) >= 2]
+        expanded_q_tokens = set(meaningful_tokens)
+        for t in list(meaningful_tokens):
+            if t.startswith("ال") and len(t) > 3:
+                expanded_q_tokens.add(t[2:])
+            if t.startswith("و") and len(t) > 3:
+                expanded_q_tokens.add(t[1:])
+            if t.startswith("وال") and len(t) > 4:
+                expanded_q_tokens.add(t[3:])
+            if t.startswith("ب") and len(t) > 3:
+                expanded_q_tokens.add(t[1:])
 
         scored = []
         for verse in self.poetry_records:
@@ -47,19 +87,33 @@ class DualRAGOrchestrator:
             norm_verse = verse.normalized_search or ArabicNormalizer.normalize_search(verse.original_text)
 
             # Exact substring match
-            if norm_q in norm_verse:
-                score += 10.0
+            if len(norm_q) >= 4 and norm_q in norm_verse:
+                score += 15.0
 
-            # Token overlap
-            v_tokens = set(norm_verse.split())
-            overlap = len(q_tokens & v_tokens)
-            score += overlap * 2.0
+            # Token overlap (using meaningful content tokens)
+            v_tokens = {t for t in norm_verse.split() if t not in arabic_stopwords and len(t) >= 2}
+            overlap = len(expanded_q_tokens & v_tokens)
+            score += overlap * 2.5
 
             # Poet match
             if verse.poet and ArabicNormalizer.normalize_search(verse.poet) in norm_q:
-                score += 5.0
+                score += 8.0
 
-            if score > 0:
+            # Theme match
+            if verse.theme:
+                norm_theme = ArabicNormalizer.normalize_search(verse.theme)
+                for t in expanded_q_tokens:
+                    if len(t) >= 3 and (t in norm_theme or norm_theme in t):
+                        score += 5.0
+
+            # Poem title match
+            if verse.poem_title:
+                norm_title = ArabicNormalizer.normalize_search(verse.poem_title)
+                for t in expanded_q_tokens:
+                    if len(t) >= 3 and (t in norm_title or norm_title in t):
+                        score += 4.0
+
+            if score >= 2.0:
                 scored.append((score, verse))
 
         scored.sort(key=lambda x: x[0], reverse=True)
@@ -84,14 +138,14 @@ class DualRAGOrchestrator:
                 return "meaning"
 
         author_keywords = [
-            "من قائل", "من الشاعر", "قائل البيت", "صاحب البيت", "لمن هذا البيت"
+            "من قائل", "من الشاعر", "قائل البيت", "صاحب البيت", "لمن هذا البيت", "من صاحب هذا البيت"
         ]
         for kw in author_keywords:
             if ArabicNormalizer.normalize_search(kw) in norm_q:
                 return "author"
 
         completion_keywords = [
-            "اكمل", "تكملة", "تتمة", "اكمل البيت"
+            "اكمل", "أكمل", "تكملة", "تتمة", "اكمل البيت", "أكمل البيت"
         ]
         for kw in completion_keywords:
             if ArabicNormalizer.normalize_search(kw) in norm_q:
@@ -105,15 +159,59 @@ class DualRAGOrchestrator:
         prefixes = [
             "من قائل:", "من قائل", "من الشاعر:", "من الشاعر",
             "قائل البيت:", "قائل البيت", "صاحب البيت:", "صاحب البيت",
+            "من صاحب هذا البيت:", "من صاحب هذا البيت",
             "ما معنى:", "ما معنى", "معنى البيت:", "معنى البيت",
             "اشرح:", "اشرح", "فسر:", "فسر", "ما تفسير:", "ما تفسير",
-            "أكمل:", "أكمل", "اكمل:", "اكمل"
+            "أكمل البيت:", "أكمل البيت", "اكمل البيت:", "اكمل البيت",
+            "أكمل:", "أكمل", "اكمل:", "اكمل", "تكملة البيت:", "تكملة البيت",
+            "أريد بيتاً عن", "اريد بيتا عن", "أريد شعر عن", "اريد شعر عن",
+            "ابحث عن شعر في", "ابحث عن بيت في"
         ]
+        # Sort prefixes descending by length so longer prefixes match first
+        prefixes.sort(key=len, reverse=True)
         for prefix in prefixes:
             if q.startswith(prefix):
                 q = q[len(prefix):].strip()
                 break
         return q.strip(":؟? ")
+
+    def answer_literary_inquiry(self, query: str) -> Dict[str, Any]:
+        """
+        Produces a strictly grounded response directly from retrieved evidence,
+        handling author identification, verse completion, meaning explanation, or safe refusal.
+        """
+        if not query or not query.strip():
+            return {
+                "answer": "المعلومة المطلوبة غير متوفرة في قاعدة بيانات الشعر.",
+                "intent": "search",
+                "retrieved_verses": []
+            }
+
+        intent = self.classify_intent(query)
+        retrieved = self.retrieve_poetry(query, top_k=3)
+
+        if not retrieved:
+            return {
+                "answer": "المعلومة المطلوبة غير متوفرة في قاعدة بيانات الشعر.",
+                "intent": intent,
+                "retrieved_verses": []
+            }
+
+        top_v = retrieved[0]
+        if intent == "author":
+            ans = f"الشاعر القائل هو: {top_v.poet} ({top_v.era}). الشاهد: {top_v.formatted_bayt()}"
+        elif intent == "completion":
+            ans = f"تكملة البيت: {top_v.ajuz} (الصدر: {top_v.sadr}) للشاعر {top_v.poet}."
+        elif intent == "meaning":
+            ans = f"معنى وبلاغة قول {top_v.poet} في بيته ({top_v.formatted_bayt()}): من بحر {top_v.prosody.meter}."
+        else:
+            ans = f"البيت المنشود للشاعر {top_v.poet} ({top_v.era}) هو:\n{top_v.formatted_bayt()}"
+
+        return {
+            "answer": ans,
+            "intent": intent,
+            "retrieved_verses": retrieved
+        }
 
     def retrieve_lexicon_for_verse(self, verse: EnrichedVerse) -> List[AsasEntry]:
         """
@@ -186,31 +284,68 @@ class DualRAGOrchestrator:
         """
         Constructs system and user prompts with balanced grounding rules,
         preventing hallucination while enabling eloquent literary interpretation.
+        Matches the 4 core tasks of advanced-arabic-poetry-rag.
         """
         context = self.build_dual_rag_context(query, retrieved_verses, intent)
+        fallback = "عذراً، المعلومة المطلوبة غير متوفرة في قاعدة الشواهد الحالية."
 
         system_prompt = (
-            "أنت «راوي» (RawiAI)، خبير أدبي متخصص في الشعر العربي الكلاسيكي وبلاغة اللغة العربية. "
-            "تعتمد في إجاباتك حصراً على الشواهد الشعرية المسترجعة وعلى معجم «أساس البلاغة» للزمخشري. "
-            "لا تختلق أبياتاً ولا تنسب شعراً لغير قائله، واشرح الاستعارات والمجازات بالاستناد إلى شواهد المعجم المرفقة."
+            "أنت «راوي» (RawiAI)، خبير أدبي متخصص في الشعر العربي الكلاسيكي وبلاغة اللغة العربية وفق معجم «أساس البلاغة» للزمخشري. "
+            "The retrieved context is the only source of truth. "
+            "Do not hallucinate, do not invent verses, and do not use outside knowledge."
         )
 
-        user_prompt = f"""
-استعلام المستخدم:
+        header = f"""استعلام المستخدم:
 {query}
 
 سياق الأدلة الموثقة (الشعر + أساس البلاغة للزمخشري):
 {context}
+"""
 
+        if intent == "author":
+            instructions = header + f"""
+التعليمات حسب نية الاستعلام ({intent}):
+1. حدد قائل البيت وعصره الأدبي ومصدره حصراً من حقل (الشاعر) و(العصر الأدبي) الموجود في سياق الأدلة الموثقة المسترجعة.
+2. لا تخمن ولا تستخدم أي معلومات خارجية إطلاقاً.
+3. إذا كان الشاعر متوفراً في السجلات المسترجعة، اذكر الإجابة باللغة العربية بدقة:
+- الشاعر: [اسم الشاعر]
+- العصر الأدبي: [العصر الأدبي]
+- القصيدة أو الديوان: [المصدر إن وجد]
+- الشاهد كاملاً: [البيت بعجز وصدر]
+- البحر العروضي: [البحر العروضي إن وجد]
+4. إذا لم تجد الشاهد في السجلات، أجب بالضبط:
+"{fallback}"
+"""
+        elif intent == "completion":
+            instructions = header + f"""
+التعليمات حسب نية الاستعلام ({intent}):
+1. أكمل الشطر أو البيت المطلوب حصراً باستخدام النص الموثق في سياق الأدلة الموثقة المسترجعة.
+2. لا تخترع أي كلمة مفقودة والتزم بالكلمات وحركات التشكيل المسترجعة تماماً.
+3. اعرض البيت مكتملاً بوضوح: الصدر ... العجز، واذكر الشاعر والبحر العروضي.
+4. إذا لم تجد البيت في السجلات، أجب بالضبط:
+"{fallback}"
+"""
+        elif intent == "meaning":
+            instructions = header + f"""
 التعليمات حسب نية الاستعلام ({intent}):
 1. اشرح المعنى بدقة بليغة مستنداً إلى المعاني الحقيقية والمجازية المذكورة في سياق أساس البلاغة.
 2. وضح الصور البيانية (الاستعارة، التشبيه، الكناية) التي استعملها الشاعر إن وُجدت.
 3. التزم فقط بالمعلومات المسترجعة ولا تؤلف سياقات تاريخية غير موجودة في الأدلة.
-
-قدم الإجابة باللغة العربية الفصحى الراقية.
+4. إذا لم تجد البيت في السجلات، أجب بالضبط:
+"{fallback}"
 """
+        else:  # search
+            instructions = header + f"""
+التعليمات حسب نية الاستعلام ({intent}):
+1. استخرج الأبيات المطابقة لموضوع الاستعلام أو كلماته من واقع سياق الأدلة الموثقة حصراً.
+2. اعرض الأبيات بدقة مع قائلها وبحرها العروضي وغرضها الشعري.
+3. لا تؤلف أبياتاً جديدة ولا تستخدم معلومات من خارج الشواهد المسترجعة.
+4. إذا لم تجد شواهد مطابقة، أجب بالضبط:
+"{fallback}"
+"""
+
         return {
             "system_prompt": system_prompt,
-            "user_prompt": user_prompt.strip(),
+            "user_prompt": instructions.strip(),
             "context": context
         }

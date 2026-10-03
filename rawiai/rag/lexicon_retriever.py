@@ -125,6 +125,8 @@ class AsasLexiconRetriever:
         norm = ArabicNormalizer.normalize_search(root)
         return self.root_index.get(norm)
 
+    get_entry_by_root = lookup_by_root
+
     def lookup_by_lemma(self, lemma: str) -> Optional[AsasEntry]:
         """Direct O(1) lookup by lemma/word."""
         norm = ArabicNormalizer.normalize_search(lemma)
@@ -197,6 +199,20 @@ class AsasLexiconRetriever:
             stem_w = PoetryArabicStemmer.stem_word(w)
 
             candidates = [norm_w, stem_w]
+            # Strip common clitics
+            for p in ["وال", "فال", "بال", "كال", "ولل", "فلل", "ال", "لل", "و", "ف", "ب"]:
+                if norm_w.startswith(p) and len(norm_w) > len(p) + 1:
+                    candidates.append(norm_w[len(p):])
+
+            # Morphological variations (suffixes & verb prefixes)
+            expanded = list(candidates)
+            for c in expanded:
+                for s in ["اء", "ني", "ها", "هم", "كم", "نا", "ات", "ون", "ين", "ية", "ة", "ي"]:
+                    if c.endswith(s) and len(c) > len(s) + 2:
+                        candidates.append(c[:-len(s)])
+                if len(c) >= 4 and c[0] in "تينأ":
+                    candidates.append(c[1:])
+
             for cand in candidates:
                 entry = self.lemma_index.get(cand) or self.root_index.get(cand)
                 if entry and entry.root not in seen_roots:
@@ -205,3 +221,8 @@ class AsasLexiconRetriever:
                     break
 
         return matched_entries
+
+
+
+# Alias for backwards compatibility and test imports
+AsasBalaghaRetriever = AsasLexiconRetriever

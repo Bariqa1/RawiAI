@@ -7,11 +7,13 @@ and extracts rhetorical motifs from 'Asas Al-Balagha'.
 from typing import List, Dict, Optional, Any
 from rawiai.agents.schemas import PoemCompositionRequest, MuseInspiration, PoeticTheme
 from rawiai.rag.lexicon_retriever import AsasLexiconRetriever
+from rawiai.rag.prosody_rules_retriever import ProsodyRulesRetriever
 from rawiai.nlp.normalizer import ArabicNormalizer
 
 
 class MuseAgent:
     """Agent responsible for conceptual inspiration, meter selection, and lexicon enrichment."""
+
 
     METERS_REGISTRY = {
         "الكامل": {
@@ -41,12 +43,19 @@ class MuseAgent:
         PoeticTheme.FAKHR: ["شجاعة", "سيف", "فروسية", "خيل", "وغى", "حرب", "بأس", "عزيمة", "فخر", "مجد", "صمود"],
         PoeticTheme.HIKMA: ["حكمة", "زمان", "دهر", "عقل", "صبر", "حق", "عدل", "تأمل", "نصيحة", "دنيا"],
         PoeticTheme.GHAZAL: ["حب", "شوق", "حنين", "غرام", "دمع", "فراق", "قلب", "هوى", "جمال"],
-        PoeticTheme.WASF: ["طبيعة", "صحراء", "مطر", "نجوم", "ليل", "بيداء", "جبل", "سماء"],
-        PoeticTheme.BIRR: ["ام", "امي", "والدة", "والدتي", "والدين", "اب", "ابي", "حنان", "عطف", "بر", "امومة", "رضا", "مهد"]
+        PoeticTheme.WASF: ["طبيعة", "صحراء", "مطر", "نجوم", "ليل", "بيداء", "جبل", "سماء", "صباح", "فجر", "قهوة", "بستان", "روض"],
+        PoeticTheme.BIRR: ["ام", "امي", "والدة", "والدتي", "والدين", "اب", "ابي", "حنان", "عطف", "بر", "امومة", "رضا", "مهد", "اخ", "اخي", "اخوة", "شقيق", "صديق", "صاحب", "رفيق", "وفاء", "قربى", "صلة"]
     }
 
-    def __init__(self, lexicon_retriever: Optional[AsasLexiconRetriever] = None):
+    ARABIC_PREFIXES = ["", "ال", "و", "وال", "ف", "فال", "ب", "بال", "ك", "كال", "ل", "لل"]
+
+    def __init__(
+        self,
+        lexicon_retriever: Optional[AsasLexiconRetriever] = None,
+        prosody_rules: Optional[ProsodyRulesRetriever] = None
+    ):
         self.lexicon_retriever = lexicon_retriever or AsasLexiconRetriever()
+        self.prosody_rules = prosody_rules or ProsodyRulesRetriever()
 
     def infer_theme(self, topic: str, user_theme: Optional[str] = None) -> str:
         """Determines the appropriate classical poetic purpose (غرض القصيدة)."""
@@ -54,12 +63,16 @@ class MuseAgent:
             return user_theme
 
         norm_topic = ArabicNormalizer.normalize_search(topic)
+        tokens = set(norm_topic.split())
+
         for theme_name, keywords in self.THEME_KEYWORDS.items():
             for kw in keywords:
-                if kw in norm_topic:
+                norm_kw = ArabicNormalizer.normalize_search(kw)
+                valid_forms = {p + norm_kw for p in self.ARABIC_PREFIXES}
+                if tokens & valid_forms:
                     return theme_name
 
-        return PoeticTheme.FAKHR  # Default default noble classical theme
+        return PoeticTheme.FAKHR  # Default noble classical theme
 
     def select_meter(self, theme: str, user_meter: Optional[str] = None) -> str:
         """Selects the most harmonious meter for the theme."""
@@ -93,9 +106,13 @@ class MuseAgent:
         elif theme == PoeticTheme.HIKMA:
             search_terms = ["عقل", "صبر", "دهر", "حزم", "بصر"]
         elif theme == PoeticTheme.BIRR:
-            search_terms = ["برر", "عطف", "نور", "كرم"]
+            search_terms = ["عضد", "عطف", "ودد", "وصل", "كرم", "برر"]
+        elif theme == PoeticTheme.WASF:
+            search_terms = ["قهو", "صبح", "روض", "عطر", "شمس"]
+        elif theme == PoeticTheme.GHAZAL:
+            search_terms = ["شوق", "وجد", "هوى", "قلب", "بدر"]
         else:
-            search_terms = ["شوق", "ليل", "بدر", "صبح"]
+            search_terms = ["صبح", "نور", "فضل", "كرم"]
 
         motifs = []
         for term in search_terms:
@@ -120,8 +137,13 @@ class MuseAgent:
         rhyme = self.select_rhyme(meter, request.target_rhyme)
         metaphors = self.retrieve_lexicon_motifs(request.topic, theme)
 
+        mnemonic_key = self.prosody_rules.get_meter_key(meter) or ""
+        zihafat = self.prosody_rules.get_permissible_zihafat(meter)
+        zihafat_str = "، ".join([z["name"] for z in zihafat]) if zihafat else "لا زحاف غالب"
+
         guidance = (
-            f"نظم {request.verse_count} أبيات على بحر {meter} ({meter_info['tafail']}) "
+            f"نظم {request.verse_count} أبيات على بحر {meter} ({meter_info['tafail']}). "
+            f"مفتاح البحر من ميزان الذهب: [{mnemonic_key}]، والزحافات الجائزة: [{zihafat_str}]. "
             f"بقوافي منتهية بحرف الروي ({rhyme}). "
             f"الغرض الشعري: {theme}. استعن بالمجازات المرفقة من أساس البلاغة للزمخشري."
         )

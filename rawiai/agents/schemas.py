@@ -102,10 +102,87 @@ class GeneratedPoem(BaseModel):
             "-" * 65
         ]
         for v in self.verses:
-            lines.append(f"[{v.verse_number}] {v.sadr:<32} ... {v.ajuz}")
+            lines.append(f"{v.sadr:<34}        {v.ajuz}")
         lines.append("-" * 65)
         if self.metaphor_sources:
             lines.append("• شواهد ومجازات من «أساس البلاغة»:")
             for m in self.metaphor_sources[:3]:
                 lines.append(f"  - [{m.get('lemma', '')}] ({m.get('root', '')}): {m.get('metaphorical_meaning', '')[:120]}...")
+        return "\n".join(lines)
+
+
+class SingleVerseEvaluation(BaseModel):
+    """Detailed diagnostic report for an individual verse submitted by a user."""
+    verse_number: int
+    sadr: str
+    ajuz: str
+    full_verse: str
+    detected_meter: str
+    meter_confidence: float
+    is_meter_valid: bool
+    sadr_meter: str
+    ajuz_meter: str
+    detected_rhyme: str
+    is_rhyme_valid: bool
+    prosodic_status: str
+    defects: List[str] = Field(default_factory=list)
+    remediation_suggestion: Optional[str] = None
+
+
+class PoeticEvaluationReport(BaseModel):
+    """Authoritative critique report for human-authored poetry, grounded in Mizan Al-Dhahab."""
+    original_input: str
+    total_verses: int
+    dominant_meter: str
+    meter_tafail: str
+    meter_mnemonic_key: str
+    dominant_rhyme: str
+    sound_verses_count: int
+    broken_verses_count: int
+    overall_score: float = Field(ge=0.0, le=100.0)
+    is_fully_sound: bool
+    verse_evaluations: List[SingleVerseEvaluation] = Field(default_factory=list)
+    poetic_defects_found: List[Dict[str, str]] = Field(default_factory=list)
+    general_critique: str = ""
+    rhetorical_analysis: str = ""
+    remedy_recommendations: List[str] = Field(default_factory=list)
+    reference_source: str = "ميزان الذهب في صناعة شعر العرب - أحمد الهاشمي"
+
+    def format_display(self) -> str:
+        """Pretty-printed evaluation report for display to the user."""
+        status_symbol = "🌟 [قصيدة موزونة وسليمة العروض]" if self.is_fully_sound else "⚠️ [تنبيه: رُصد خلل أو كسر عروضي يحتاج تهذيباً]"
+        lines = [
+            "=" * 70,
+            f"📜 تقرير التحكيم والنقد الشعري (مستند إلى «{self.reference_source}»)",
+            f"{status_symbol}",
+            f"• البحر العروضي الأغلب: {self.dominant_meter} ({self.meter_tafail})",
+            f"• مفتاح البحر المنظوم: {self.meter_mnemonic_key}",
+            f"• القافية والروي الملتزم: حرف ({self.dominant_rhyme})",
+            f"• الدرجة العروضية العامة: {self.overall_score:.1f} / 100",
+            f"• إحصاء الأبيات: {self.sound_verses_count} سليم موزون من أصل {self.total_verses}",
+            "-" * 70,
+            "🔍 التحليل التفصيلي للأبيات:"
+        ]
+        for v in self.verse_evaluations:
+            mark = "✅" if v.is_meter_valid and v.is_rhyme_valid else "❌"
+            lines.append(f"[{v.verse_number}] {v.sadr} ... {v.ajuz} {mark}")
+            lines.append(f"    - الوزن: {v.prosodic_status} (البحر: {v.detected_meter} | ثقة: {v.meter_confidence:.0%})")
+            lines.append(f"    - القافية: روي ({v.detected_rhyme})")
+            if v.defects:
+                lines.append(f"    - العيوب المرصودة: {', '.join(v.defects)}")
+            if v.remediation_suggestion:
+                lines.append(f"    - التصويب المقترح: {v.remediation_suggestion}")
+        lines.append("-" * 70)
+        if self.poetic_defects_found:
+            lines.append("⚠️ تشخيص العيوب وفق «ميزان الذهب»:")
+            for d in self.poetic_defects_found:
+                lines.append(f"  • عيب [{d.get('name')}]: {d.get('definition')}")
+                lines.append(f"    العلاج: {d.get('remedy')}")
+            lines.append("-" * 70)
+        if self.rhetorical_analysis:
+            lines.append(f"🎨 النقد البياني والبلاغي:\n{self.rhetorical_analysis}")
+            lines.append("-" * 70)
+        if self.general_critique:
+            lines.append(f"💡 خلاصة التحكيم والتوجيهات:\n{self.general_critique}")
+            lines.append("=" * 70)
         return "\n".join(lines)

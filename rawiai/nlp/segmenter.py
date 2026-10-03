@@ -14,6 +14,7 @@ class VerseSegmenter:
     # Primary explicit separators commonly used in Arabic poetry corpora
     EXPLICIT_SEPARATORS = [
         re.compile(r"\s*#\s*"),
+        re.compile(r"\s*[•·▪]\s*"),
         re.compile(r"\s*\t\s*"),
         re.compile(r"\s*\.{3,}\s*"),
         re.compile(r"\s*…\s*"),

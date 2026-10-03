@@ -35,8 +35,8 @@ class AsasEntry(BaseModel):
         """Formatted block for injection into LLM prompt context."""
         lines = [
             f"• مادة [{self.lemma}] (الجذر: {self.root}) من {self.source}:",
-            f"  - المعنى الحقيقي: {self.literal_meaning}",
-            f"  - الاستعمال المجازي والبلاغي: {self.metaphorical_meaning}",
+            f"  - المعنى الحقيقي (المعنى الوضعي): {self.literal_meaning}",
+            f"  - الاستعمال المجازي والبلاغي (المجاز والاستعارة): {self.metaphorical_meaning}",
         ]
         if self.poetic_citations:
             lines.append("  - شواهد شعرية وبلاغية من كلام العرب:")

@@ -1,24 +1,141 @@
 [
   {
     "id": "TC01",
-    "query": "ما معنى حَكِّم سُيُوفَكَ في رِقَابِ العُذَّلِ؟",
-    "intent": "meaning",
-    "target_verse_substring": "حكم سيوفك في رقاب العذل",
-    "expected_poet": "عنترة بن شداد",
-    "ground_truth": "يمضي الشاعر في شجاعته وعزيمته قاطعاً ألسنة اللائمين (العُذَّل) بسيفه، مؤكداً أنه لا يبالي باللوم والعذل في طلب العزة والمجد.",
-    "expected_lexicon_roots": ["عذل", "سيف"]
-  },
-  {
-    "id": "TC02",
     "query": "من قائل: الخيل والليل والبيداء تعرفني؟",
     "intent": "author",
     "target_verse_substring": "الخيل والليل والبيداء تعرفني",
     "expected_poet": "أبو الطيب المتنبي",
     "ground_truth": "أبو الطيب المتنبي",
-    "expected_lexicon_roots": []
+    "expected_lexicon_roots": ["خيل", "ليل", "بيد"]
+  },
+  {
+    "id": "TC02",
+    "query": "من قائل: على قدر أهل العزم تأتي العزائم؟",
+    "intent": "author",
+    "target_verse_substring": "على قدر أهل العزم تأتي العزائم",
+    "expected_poet": "أبو الطيب المتنبي",
+    "ground_truth": "أبو الطيب المتنبي",
+    "expected_lexicon_roots": ["عزم", "قدر"]
   },
   {
     "id": "TC03",
+    "query": "من الشاعر صاحب بيت: إذا رأيت نيوب الليث بارزة؟",
+    "intent": "author",
+    "target_verse_substring": "إذا رأيت نيوب الليث بارزة",
+    "expected_poet": "أبو الطيب المتنبي",
+    "ground_truth": "أبو الطيب المتنبي",
+    "expected_lexicon_roots": ["ليث"]
+  },
+  {
+    "id": "TC04",
+    "query": "من قائل: ما كل ما يتمنى المرء يدركه؟",
+    "intent": "author",
+    "target_verse_substring": "ما كل ما يتمنى المرء يدركه",
+    "expected_poet": "أبو الطيب المتنبي",
+    "ground_truth": "أبو الطيب المتنبي",
+    "expected_lexicon_roots": ["ريح", "سفن"]
+  },
+  {
+    "id": "TC05",
+    "query": "لمن هذا البيت: أنا الذي نظر الأعمى إلى أدبي؟",
+    "intent": "author",
+    "target_verse_substring": "أنا الذي نظر الأعمى إلى أدبي",
+    "expected_poet": "أبو الطيب المتنبي",
+    "ground_truth": "أبو الطيب المتنبي",
+    "expected_lexicon_roots": ["أدب"]
+  },
+  {
+    "id": "TC06",
+    "query": "من قائل: حكم سيوفك في رقاب العذل؟",
+    "intent": "author",
+    "target_verse_substring": "حكم سيوفك في رقاب العذل",
+    "expected_poet": "عنترة بن شداد",
+    "ground_truth": "عنترة بن شداد",
+    "expected_lexicon_roots": ["سيف", "عذل"]
+  },
+  {
+    "id": "TC07",
+    "query": "من صاحب البيت: واختر لنفسك منزلا تعلو به؟",
+    "intent": "author",
+    "target_verse_substring": "واختر لنفسك منزلا تعلو به",
+    "expected_poet": "عنترة بن شداد",
+    "ground_truth": "عنترة بن شداد",
+    "expected_lexicon_roots": ["قسطل"]
+  },
+  {
+    "id": "TC08",
+    "query": "من قائل: هلا سألت الخيل يا ابنة مالك؟",
+    "intent": "author",
+    "target_verse_substring": "هلا سألت الخيل يا ابنة مالك",
+    "expected_poet": "عنترة بن شداد",
+    "ground_truth": "عنترة بن شداد",
+    "expected_lexicon_roots": ["خيل"]
+  },
+  {
+    "id": "TC09",
+    "query": "من قائل: قفا نبك من ذكرى حبيب ومنزل؟",
+    "intent": "author",
+    "target_verse_substring": "قفا نبك من ذكرى حبيب ومنزل",
+    "expected_poet": "امرؤ القيس",
+    "ground_truth": "امرؤ القيس",
+    "expected_lexicon_roots": ["حبيب", "منزل"]
+  },
+  {
+    "id": "TC10",
+    "query": "من الشاعر القائل: وليل كموج البحر أرخى سدوله؟",
+    "intent": "author",
+    "target_verse_substring": "وليل كموج البحر أرخى سدوله",
+    "expected_poet": "امرؤ القيس",
+    "ground_truth": "امرؤ القيس",
+    "expected_lexicon_roots": ["بحر", "ليل"]
+  },
+  {
+    "id": "TC11",
+    "query": "من قائل: إذا المرء لم يدنس من اللؤم عرضه؟",
+    "intent": "author",
+    "target_verse_substring": "إذا المرء لم يدنس من اللؤم عرضه",
+    "expected_poet": "السموأل",
+    "ground_truth": "السموأل",
+    "expected_lexicon_roots": ["لؤم", "عرض"]
+  },
+  {
+    "id": "TC12",
+    "query": "من صاحب البيت: وظلم ذوي القربى أشد مضاضة؟",
+    "intent": "author",
+    "target_verse_substring": "وظلم ذوي القربى أشد مضاضة",
+    "expected_poet": "طرفة بن العبد",
+    "ground_truth": "طرفة بن العبد",
+    "expected_lexicon_roots": ["ظلم", "حسام"]
+  },
+  {
+    "id": "TC13",
+    "query": "من قائل: دع الأيام تفعل ما تشاء؟",
+    "intent": "author",
+    "target_verse_substring": "دع الأيام تفعل ما تشاء",
+    "expected_poet": "الإمام الشافعي",
+    "ground_truth": "الإمام الشافعي",
+    "expected_lexicon_roots": ["قضاء"]
+  },
+  {
+    "id": "TC14",
+    "query": "من قائل: أراك عصي الدمع شيمتك الصبر؟",
+    "intent": "author",
+    "target_verse_substring": "أراك عصي الدمع شيمتك الصبر",
+    "expected_poet": "أبو فراس الحمداني",
+    "ground_truth": "أبو فراس الحمداني",
+    "expected_lexicon_roots": ["صبر", "دمع"]
+  },
+  {
+    "id": "TC15",
+    "query": "من قائل: السيف أصدق أنباء من الكتب؟",
+    "intent": "author",
+    "target_verse_substring": "السيف أصدق أنباء من الكتب",
+    "expected_poet": "أبو تمام",
+    "ground_truth": "أبو تمام",
+    "expected_lexicon_roots": ["سيف", "كتب"]
+  },
+  {
+    "id": "TC16",
     "query": "أكمل: قفا نبك من ذكرى حبيب ومنزل",
     "intent": "completion",
     "target_verse_substring": "قفا نبك من ذكرى حبيب ومنزل",
@@ -27,25 +144,106 @@
     "expected_lexicon_roots": []
   },
   {
-    "id": "TC04",
+    "id": "TC17",
+    "query": "أكمل البيت: الخيل والليل والبيداء تعرفني",
+    "intent": "completion",
+    "target_verse_substring": "الخيل والليل والبيداء تعرفني",
+    "expected_poet": "أبو الطيب المتنبي",
+    "ground_truth": "وَالسَّيْفُ وَالرُّمْحُ وَالقِرْطَاسُ وَالقَلَمُ",
+    "expected_lexicon_roots": []
+  },
+  {
+    "id": "TC18",
+    "query": "أكمل: ألا هبي بصحنك فاصبحينا",
+    "intent": "completion",
+    "target_verse_substring": "ألا هبي بصحنك فاصبحينا",
+    "expected_poet": "عمرو بن كلثوم",
+    "ground_truth": "وَلاَ تُبْقِي خُمُورَ الأَنْدَرِينَا",
+    "expected_lexicon_roots": []
+  },
+  {
+    "id": "TC19",
+    "query": "أكمل الشطر الثاني: دع الأيام تفعل ما تشاء",
+    "intent": "completion",
+    "target_verse_substring": "دع الأيام تفعل ما تشاء",
+    "expected_poet": "الإمام الشافعي",
+    "ground_truth": "وَطِبْ نَفْساً إِذَا حَكَمَ القَضَاءُ",
+    "expected_lexicon_roots": []
+  },
+  {
+    "id": "TC20",
+    "query": "أكمل البيت: قم للمعلم وفه التبجيلا",
+    "intent": "completion",
+    "target_verse_substring": "قم للمعلم وفه التبجيلا",
+    "expected_poet": "أحمد شوقي",
+    "ground_truth": "كَادَ المُعَلِّمُ أَنْ يَكُونَ رَسُولاَ",
+    "expected_lexicon_roots": []
+  },
+  {
+    "id": "TC21",
+    "query": "أكمل: إذا الشعب يوما أراد الحياة",
+    "intent": "completion",
+    "target_verse_substring": "إذا الشعب يوما أراد الحياة",
+    "expected_poet": "أبو القاسم الشابي",
+    "ground_truth": "فَلاَ بُدَّ أَنْ يَسْتَجِيبَ القَدَرُ",
+    "expected_lexicon_roots": []
+  },
+  {
+    "id": "TC22",
+    "query": "أكمل: أراك عصي الدمع شيمتك الصبر",
+    "intent": "completion",
+    "target_verse_substring": "أراك عصي الدمع شيمتك الصبر",
+    "expected_poet": "أبو فراس الحمداني",
+    "ground_truth": "أَمَا لِلْهَوَى نَهْيٌ عَلَيْكَ وَلاَ أَمْرُ",
+    "expected_lexicon_roots": []
+  },
+  {
+    "id": "TC23",
+    "query": "أكمل البيت: سئمت تكاليف الحياة ومن يعش",
+    "intent": "completion",
+    "target_verse_substring": "سئمت تكاليف الحياة ومن يعش",
+    "expected_poet": "زهير بن أبي سلمى",
+    "ground_truth": "ثَمَانِينَ حَوْلاً لاَ أَبَا لَكَ يَسْأَمِ",
+    "expected_lexicon_roots": []
+  },
+  {
+    "id": "TC24",
+    "query": "أكمل: ولقد ذكرتك والرماح نواهل",
+    "intent": "completion",
+    "target_verse_substring": "ولقد ذكرتك والرماح نواهل",
+    "expected_poet": "عنترة بن شداد",
+    "ground_truth": "مِنِّي وَبِيضُ الهِنْدِ تَقْطُرُ مِنْ دَمِي",
+    "expected_lexicon_roots": []
+  },
+  {
+    "id": "TC25",
+    "query": "أكمل: وأحسن منك لم تر قط عيني",
+    "intent": "completion",
+    "target_verse_substring": "وأحسن منك لم تر قط عيني",
+    "expected_poet": "حسان بن ثابت",
+    "ground_truth": "وَأَجْمَلُ مِنْكَ لَمْ تَلِدِ النِّسَاءُ",
+    "expected_lexicon_roots": []
+  },
+  {
+    "id": "TC26",
+    "query": "ما معنى حَكِّم سُيُوفَكَ في رِقَابِ العُذَّلِ؟",
+    "intent": "meaning",
+    "target_verse_substring": "حكم سيوفك في رقاب العذل",
+    "expected_poet": "عنترة بن شداد",
+    "ground_truth": "يمضي الشاعر في شجاعته وعزيمته قاطعاً ألسنة اللائمين (العُذَّل) بسيفه، مؤكداً أنه لا يبالي باللوم والعذل في طلب العزة والمجد.",
+    "expected_lexicon_roots": ["عذل", "سيف"]
+  },
+  {
+    "id": "TC27",
     "query": "اشرح المجاز والبلاغة في: الخيل والليل والبيداء تعرفني",
     "intent": "meaning",
     "target_verse_substring": "الخيل والليل والبيداء تعرفني",
     "expected_poet": "أبو الطيب المتنبي",
-    "ground_truth": "استعارة مكنية حيث جعل الشاعر الجمادات (الليل، البيداء) والحيوان (الخيل) أشخاصاً عقلاء يعرفونه ويشهدون له بالفروسية والشجاعة والثبات، والبيداء الصحراء التي تبيد سالكها.",
+    "ground_truth": "استعارة مكنية حيث جعل الشاعر الجمادات والحيوان أشخاصاً عقلاء يعرفونه ويشهدون له بالفروسية والشجاعة، والبيداء الصحراء التي تبيد سالكها.",
     "expected_lexicon_roots": ["بيد", "خيل", "سيف"]
   },
   {
-    "id": "TC05",
-    "query": "أريد بيتاً لعنترة عن الشجاعة ومغادرة دار الهوان",
-    "intent": "search",
-    "target_verse_substring": "وإذا نزلت بدار ذل فارحل",
-    "expected_poet": "عنترة بن شداد",
-    "ground_truth": "حكم سيوفك في رقاب العذل ... وإذا نزلت بدار ذل فارحل",
-    "expected_lexicon_roots": []
-  },
-  {
-    "id": "TC06",
+    "id": "TC28",
     "query": "ما معنى كلمة القسطل في قول عنترة: أو مت كريماً تحت ظل القسطل؟",
     "intent": "meaning",
     "target_verse_substring": "أو مت كريما تحت ظل القسطل",
@@ -54,25 +252,142 @@
     "expected_lexicon_roots": ["قسطل"]
   },
   {
-    "id": "TC07",
-    "query": "من قائل: إذا المرء لم يدنس من اللؤم عرضه؟",
-    "intent": "author",
-    "target_verse_substring": "إذا المرء لم يدنس من اللؤم عرضه",
-    "expected_poet": "السموأل",
-    "ground_truth": "السموأل",
+    "id": "TC29",
+    "query": "ما معنى وبلاغة قول امرئ القيس: وليل كموج البحر أرخى سدوله؟",
+    "intent": "meaning",
+    "target_verse_substring": "وليل كموج البحر أرخى سدوله",
+    "expected_poet": "امرؤ القيس",
+    "ground_truth": "تشبيه لظلمة الليل وتراكم همومه بأمواج البحر المتلاطمة في الثقل والرهبة، وأرخى سدوله استعارة تصريحية جعلت الظلام كالسواتر والستائر المنسدلة.",
+    "expected_lexicon_roots": ["ليل", "بحر"]
+  },
+  {
+    "id": "TC30",
+    "query": "ما معنى قول المتنبي: على قدر أهل العزم تأتي العزائم؟",
+    "intent": "meaning",
+    "target_verse_substring": "على قدر أهل العزم تأتي العزائم",
+    "expected_poet": "أبو الطيب المتنبي",
+    "ground_truth": "حكمة بالغة تفيد أن عظام الأمور والأفعال الجليلة لا تصدر إلا عن ذوي الهمم العالية والنفوس الأبية على قدر ما فيهم من صرامة وجلد.",
+    "expected_lexicon_roots": ["عزم", "قدر"]
+  },
+  {
+    "id": "TC31",
+    "query": "اشرح بلاغة: إذا رأيت نيوب الليث بارزة فلا تظنن أن الليث يبتسم",
+    "intent": "meaning",
+    "target_verse_substring": "إذا رأيت نيوب الليث بارزة",
+    "expected_poet": "أبو الطيب المتنبي",
+    "ground_truth": "إذا رأيت نيوب الليث بارزة فلا تظن أن الليث يبتسم، فإن بروز أنيابه علامة الافتراس والبطش.",
+    "expected_lexicon_roots": ["ليث"]
+  },
+  {
+    "id": "TC32",
+    "query": "ما معنى قول طرفة: وظلم ذوي القربى أشد مضاضة؟",
+    "intent": "meaning",
+    "target_verse_substring": "وظلم ذوي القربى أشد مضاضة",
+    "expected_poet": "طرفة بن العبد",
+    "ground_truth": "مضاضة الشيء: حرارته وحرقته وألمه الشديد على النفس؛ وظلم الأقارب أثقل وقعاً وأشد إيلاماً من طعنات السيوف المهندة القاطعة.",
+    "expected_lexicon_roots": ["ظلم", "حسام"]
+  },
+  {
+    "id": "TC33",
+    "query": "ما معنى وبلاغة قول الخنساء: كأنه علم في رأسه نار؟",
+    "intent": "meaning",
+    "target_verse_substring": "وإن صخرا لتأتم الهداة به",
+    "expected_poet": "الخنساء",
+    "ground_truth": "العلم هو الجبل المشهور، وتشبه الخنساء أخاها صخراً في هداية القوم به كالجبل الذي في رأسه نار يهتدي بها السائرون.",
+    "expected_lexicon_roots": ["علم", "نار"]
+  },
+  {
+    "id": "TC34",
+    "query": "اشرح مجاز: تجري الرياح بما لا تشتهي السفن",
+    "intent": "meaning",
+    "target_verse_substring": "تجري الرياح بما لا تشتهي السفن",
+    "expected_poet": "أبو الطيب المتنبي",
+    "ground_truth": "استعارة تمثيلية تضرب لمن يحاول بلوغ مقصد فلا تسعفه المقادير والظروف الخارجية، تماماً كسفن البحر التي تتقاذفها الرياح المعاكسة.",
+    "expected_lexicon_roots": ["ريح", "سفن"]
+  },
+  {
+    "id": "TC35",
+    "query": "ما معنى قول المعري: غير مجد في ملتي واعتقادي نوح باك؟",
+    "intent": "meaning",
+    "target_verse_substring": "غير مجد في ملتي واعتقادي",
+    "expected_poet": "أبو العلاء المعري",
+    "ground_truth": "فلسفة زهدية تعبر عن عدم جدوى الجزع والبكاء على الموتى، مساوياً بين بكاء الحزين وترنم المغني أمام حتمية الموت وفناء الحياة.",
+    "expected_lexicon_roots": ["نوح"]
+  },
+  {
+    "id": "TC36",
+    "query": "أريد بيتاً لعنترة عن الشجاعة ومغادرة دار الهوان",
+    "intent": "search",
+    "target_verse_substring": "وإذا نزلت بدار ذل فارحل",
+    "expected_poet": "عنترة بن شداد",
+    "ground_truth": "حكم سيوفك في رقاب العذل ... وإذا نزلت بدار ذل فارحل",
     "expected_lexicon_roots": []
   },
   {
-    "id": "TC08",
-    "query": "أكمل البيت: ألا هبي بصحنك فاصبحينا",
-    "intent": "completion",
-    "target_verse_substring": "ألا هبي بصحنك فاصبحينا",
+    "id": "TC37",
+    "query": "أريد شعراً عن الرضا بالقضاء والقدر وطمأنينة النفس",
+    "intent": "search",
+    "target_verse_substring": "دع الأيام تفعل ما تشاء",
+    "expected_poet": "الإمام الشافعي",
+    "ground_truth": "دع الأيام تفعل ما تشاء ... وطب نفساً إذا حكم القضاء",
+    "expected_lexicon_roots": []
+  },
+  {
+    "id": "TC38",
+    "query": "أريد بيتاً عن فضل المعلم وإجلاله",
+    "intent": "search",
+    "target_verse_substring": "قم للمعلم وفه التبجيلا",
+    "expected_poet": "أحمد شوقي",
+    "ground_truth": "قم للمعلم وفه التبجيلا ... كاد المعلم أن يكون رسولا",
+    "expected_lexicon_roots": []
+  },
+  {
+    "id": "TC39",
+    "query": "أريد بيتاً عن حب الحرية وإرادة الشعوب للحياة",
+    "intent": "search",
+    "target_verse_substring": "إذا الشعب يوما أراد الحياة",
+    "expected_poet": "أبو القاسم الشابي",
+    "ground_truth": "إذا الشعب يوماً أراد الحياة ... فلا بد أن يستجيب القدر",
+    "expected_lexicon_roots": []
+  },
+  {
+    "id": "TC40",
+    "query": "أريد بيتاً للخنساء في رثاء أخيها صخر",
+    "intent": "search",
+    "target_verse_substring": "وإن صخرا لتأتم الهداة به",
+    "expected_poet": "الخنساء",
+    "ground_truth": "وإن صخراً لتأتم الهداة به ... كأنه علم في رأسه نار",
+    "expected_lexicon_roots": []
+  },
+  {
+    "id": "TC41",
+    "query": "أريد بيتاً لحسان بن ثابت في مدح النبي وجمال خلقه",
+    "intent": "search",
+    "target_verse_substring": "وأحسن منك لم تر قط عيني",
+    "expected_poet": "حسان بن ثابت",
+    "ground_truth": "وأحسن منك لم تر قط عيني ... وأجمل منك لم تلد النساء",
+    "expected_lexicon_roots": []
+  },
+  {
+    "id": "TC42",
+    "query": "أريد بيتاً للمتنبي عن علو الهمة في الشرف والمجد",
+    "intent": "search",
+    "target_verse_substring": "إذا غامرت في شرف مروم",
+    "expected_poet": "أبو الطيب المتنبي",
+    "ground_truth": "إذا غامرت في شرف مروم ... فلا تقنع بما دون النجوم",
+    "expected_lexicon_roots": []
+  },
+  {
+    "id": "TC43",
+    "query": "أريد بيتاً لعمرو بن كلثوم: إذا بلغ الفطام لنا صبي",
+    "intent": "search",
+    "target_verse_substring": "إذا بلغ الفطام لنا صبي",
     "expected_poet": "عمرو بن كلثوم",
-    "ground_truth": "وَلاَ تُبْقِي خُمُورَ الأَنْدَرِينَا",
+    "ground_truth": "إذا بلغ الفطام لنا صبي ... تخر له الجبابر ساجدينا",
     "expected_lexicon_roots": []
   },
   {
-    "id": "TC09",
+    "id": "TC44",
     "query": "ما هي الأبيات التي كتبها المتنبي عن ركوب الطائرات والسفر بالفضاء؟",
     "intent": "search",
     "target_verse_substring": null,
@@ -81,8 +396,53 @@
     "expected_lexicon_roots": []
   },
   {
-    "id": "TC10",
+    "id": "TC45",
     "query": "من الشاعر القائل: هذه عبارة وهمية معاصرة تماماً وغير موجودة في التراث؟",
+    "intent": "author",
+    "target_verse_substring": null,
+    "expected_poet": null,
+    "ground_truth": "المعلومة المطلوبة غير متوفرة في قاعدة بيانات الشعر.",
+    "expected_lexicon_roots": []
+  },
+  {
+    "id": "TC46",
+    "query": "أكمل البيت: دخلت السوبرماركت واشتريت جهاز حاسوب حديث",
+    "intent": "completion",
+    "target_verse_substring": null,
+    "expected_poet": null,
+    "ground_truth": "المعلومة المطلوبة غير متوفرة في قاعدة بيانات الشعر.",
+    "expected_lexicon_roots": []
+  },
+  {
+    "id": "TC47",
+    "query": "ما معنى كلمة البلوكشين والعملات الرقمية المشفرة وتعدين البيتكوين؟",
+    "intent": "meaning",
+    "target_verse_substring": null,
+    "expected_poet": null,
+    "ground_truth": "المعلومة المطلوبة غير متوفرة في قاعدة بيانات الشعر.",
+    "expected_lexicon_roots": []
+  },
+  {
+    "id": "TC48",
+    "query": "من قائل هذا البيت الوهمي: شربت العصير في سيارة تيسلا سريعة؟",
+    "intent": "author",
+    "target_verse_substring": null,
+    "expected_poet": null,
+    "ground_truth": "المعلومة المطلوبة غير متوفرة في قاعدة بيانات الشعر.",
+    "expected_lexicon_roots": []
+  },
+  {
+    "id": "TC49",
+    "query": "أريد قصيدة عن لغة بايثون وتطوير مواقع الويب وتدريب الشبكات العصبية",
+    "intent": "search",
+    "target_verse_substring": null,
+    "expected_poet": null,
+    "ground_truth": "المعلومة المطلوبة غير متوفرة في قاعدة بيانات الشعر.",
+    "expected_lexicon_roots": []
+  },
+  {
+    "id": "TC50",
+    "query": "من الشاعر الملقب بأبي الفلافل في العصر الجاهلي؟",
     "intent": "author",
     "target_verse_substring": null,
     "expected_poet": null,

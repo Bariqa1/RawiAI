@@ -20,6 +20,10 @@ ARABIC_PUNCTUATION_PATTERN = re.compile(
 TATWEEL = "ـ"
 
 
+# Invisible control characters (ZWSP, ZWNJ, ZWJ, LTR, RTL, overrides, BOM)
+INVISIBLE_CHARS_PATTERN = re.compile(r"[\u200B-\u200F\u202A-\u202E\uFEFF\u2060-\u206F]")
+
+
 class ArabicNormalizer:
     """Specialized normalizer designed for classical Arabic and poetry."""
 
@@ -29,6 +33,10 @@ class ArabicNormalizer:
         if not text:
             return ""
         return ARABIC_DIACRITICS_PATTERN.sub("", text)
+
+    # Aliases for compatibility
+    strip_tashkeel = remove_tashkeel
+    strip_diacritics = remove_tashkeel
 
     @staticmethod
     def remove_tatweel(text: str) -> str:
@@ -41,6 +49,7 @@ class ArabicNormalizer:
     def normalize_search(text: str) -> str:
         """
         Normalizes Arabic text for lexical and semantic retrieval.
+        - Strips invisible unicode control chars (ZWSP, LTR/RTL overrides)
         - Strips diacritics and tatweel
         - Unifies Alef variants (إ, أ, آ, ٱ -> ا)
         - Unifies Hamza carriers (ؤ -> و, ئ -> ي)
@@ -52,6 +61,7 @@ class ArabicNormalizer:
             return ""
 
         s = str(text)
+        s = INVISIBLE_CHARS_PATTERN.sub("", s)
         s = ARABIC_DIACRITICS_PATTERN.sub("", s)
         s = s.replace(TATWEEL, "")
 

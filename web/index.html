@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>راوي | مجلس الاستفسار وبلاغة التراث العربي</title>
+  <meta name="description" content="منظومة راوي للاستفسار وتوثيق الشواهد الشعرية واستخراج مجازات معجم أساس البلاغة للزمخشري وتحكيم موازين الشعر">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css?v=3.0">
+</head>
+<body class="light-theme">
+
+  <!-- Header Navigation -->
+  <header class="app-header">
+    <div class="header-container">
+      <div class="brand-group">
+        <div class="brand-text">
+          <h1 class="brand-title">رَاوِي <span class="brand-subtitle-inline">| ديوان الاستدلال وبلاغة التراث العربي</span></h1>
+        </div>
+      </div>
+
+      <nav class="nav-tabs" role="tablist">
+        <button id="tab-attribution-btn" class="nav-tab active" data-tab="tab-attribution" role="tab" aria-selected="true">
+          <span class="tab-label">مجلس الاستفسار والشواهد</span>
+        </button>
+        <button id="tab-lexicon-btn" class="nav-tab" data-tab="tab-lexicon" role="tab" aria-selected="false">
+          <span class="tab-label">معجم أساس البلاغة</span>
+        </button>
+        <button id="tab-evaluate-btn" class="nav-tab" data-tab="tab-evaluate" role="tab" aria-selected="false">
+          <span class="tab-label">تحكيم الشعر ونقده</span>
+        </button>
+        <button id="tab-mizan-btn" class="nav-tab" data-tab="tab-mizan" role="tab" aria-selected="false">
+          <span class="tab-label">موسوعة ميزان الذهب</span>
+        </button>
+        <button id="tab-compose-btn" class="nav-tab" data-tab="tab-compose" role="tab" aria-selected="false">
+          <span class="tab-label">الملهم الشعري</span>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero Showcase Section -->
+  <section class="hero-showcase">
+    <div class="hero-container">
+      <div class="hero-content">
+        <h2 class="hero-headline">
+          مجلس استفسار الشواهد وبلاغة التراث العربي
+        </h2>
+        <p class="hero-lead">
+          محرك استدلال واسترجاع موثّق (Hybrid RAG) لتوثيق نسبة الأبيات لشعرائها من أمهات الدواوين، واستكشاف فوارق الحقيقة والمجاز من <strong>معجم «أساس البلاغة» للزمخشري</strong>، وضبط أوزان بحور الخليل وأحكام القوافي.
+        </p>
+
+        <div class="hero-actions">
+          <button id="hero-start-attr" class="btn btn-primary">
+            <span>اسأل مجلس الشواهد (من القائل؟)</span>
+          </button>
+          <button id="hero-start-lex" class="btn btn-secondary">
+            <span>ابحث في معجم أساس البلاغة</span>
+          </button>
+        </div>
+
+        <div class="hero-sublinks">
+          <span class="sublinks-label">أقسام مساعدة:</span>
+          <button id="hero-start-eval" class="text-link-btn">تحكيم ونقد الأبيات</button>
+          <span class="sep">/</span>
+          <button id="hero-start-compose" class="text-link-btn">الملهم الشعري للنظم</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Workspaces Container -->
+  <main class="main-container">
+
+    <!-- =====================================================================
+         PILLAR 1 (DEFAULT): Q&A COUNCIL & POET ATTRIBUTION
+         مجلس الاستفسار والشواهد التراثية
+         ===================================================================== -->
+    <section id="tab-attribution" class="tab-content active" role="tabpanel">
+      <div class="section-header">
+        <h3 class="section-title">مجلس الاستفسار وتوثيق الشواهد</h3>
+        <p class="section-desc">منظومة الإجابة الذكية الموثقة من ديوان الشعر العربي؛ تعتمد على الاسترجاع لمنع الهلوسة وعزو الأبيات وإكمال الشطور وشرح الغريب</p>
+      </div>
+
+      <div class="card attribution-search-card">
+        <!-- Mode Tabs -->
+        <div class="qa-mode-tabs">
+          <button class="qa-mode-chip active" data-mode="all">جميع الاستفسارات</button>
+          <button class="qa-mode-chip" data-mode="author">من القائل؟</button>
+          <button class="qa-mode-chip" data-mode="completion">أكمل البيت</button>
+          <button class="qa-mode-chip" data-mode="meaning">شرح ومعنى البيت</button>
+          <button class="qa-mode-chip" data-mode="search">البحث في الديوان</button>
+        </div>
+
+        <div class="search-bar-wrap">
+          <input type="text" id="attr-search-input" class="search-input" placeholder="اكتب سؤالك (مثال: من قائل: حكم سيوفك في رقاب العذل؟ أو أكمل: قفا نبك... أو ما معنى: الخيل والليل)..." value="من قائل: حَكِّم سُيوفَكَ في رِقابِ العُذَّلِ؟">
+          <button id="btn-attr-search" class="btn btn-primary">
+            <span class="btn-spinner" id="attr-spinner" style="display: none;"></span>
+            <span id="attr-btn-text">اسأل راوي</span>
+          </button>
+        </div>
+
+        <div class="quick-samples-bar">
+          <span class="quick-samples-label">شواهد مقترحة:</span>
+          <button class="attr-sample-btn" data-query="من قائل: حَكِّم سُيوفَكَ في رِقابِ العُذَّلِ؟">من القائل: حكم سيوفك</button>
+          <button class="attr-sample-btn" data-query="من قائل: الخَيْلُ وَاللَّيْلُ وَالبَيْدَاءُ تَعْرِفُنِي؟">من القائل: الخيل والليل</button>
+          <button class="attr-sample-btn" data-query="أكمل: قفا نبك من ذكرى حبيب ومنزل">أكمل: قفا نبك</button>
+          <button class="attr-sample-btn" data-query="ما معنى حَكِّم سُيوفَكَ في رِقابِ العُذَّلِ؟">ما معنى: حكم سيوفك ومجازاته؟</button>
+          <button class="attr-sample-btn" data-query="أريد بيتاً عن الشجاعة ومواجهة الأعداء">بحث: الشجاعة والفروسية</button>
+        </div>
+
+        <!-- AI Grounded Answer Showcase Box -->
+        <div id="qa-answer-box" class="qa-answer-showcase" style="display: none;">
+          <div class="qa-header">
+            <div class="qa-header-meta">
+              <span id="qa-intent-badge" class="qa-intent-title">معرفة قائل البيت</span>
+              <span class="qa-source-note">توثيق مباشر من أمهات الدواوين</span>
+            </div>
+          </div>
+          <div class="qa-body">
+            <div id="qa-answer-text" class="qa-answer-content"></div>
+          </div>
+        </div>
+
+        <!-- Retrieved Verses and Metaphors Container -->
+        <div class="qa-evidence-section">
+          <h4 class="qa-evidence-title" id="qa-evidence-heading" style="display: none;">الشواهد المسترجعة ومجازات «أساس البلاغة»:</h4>
+          <div id="attr-results-list" class="attr-results-container">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         PILLAR 2: ASAS AL-BALAGHA LEXICON
+         معجم «أساس البلاغة» للزمخشري
+         ===================================================================== -->
+    <section id="tab-lexicon" class="tab-content" role="tabpanel">
+      <div class="section-header">
+        <h3 class="section-title">معجم «أساس البلاغة» للزمخشري</h3>
+        <p class="section-desc">استكشاف فوارق الحقيقة والمجاز، الشواهد الشعرية التراثية، والبحث في جذور المعجم الدلالي</p>
+      </div>
+
+      <div class="card lexicon-search-card">
+        <div class="search-bar-wrap">
+          <input type="text" id="lexicon-search-input" class="search-input" placeholder="ابحث عن جذر أو مفردة بلاغية (مثل: سيف، خيل، بدر، قمر، بحر)..." value="سيف">
+          <button id="btn-lexicon-search" class="btn btn-primary">بحث في المعجم</button>
+        </div>
+
+        <div id="lexicon-results-list" class="lexicon-results">
+          <!-- Dynamically populated -->
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         SECONDARY: POETRY EVALUATOR & CRITIC
+         تحكيم ونقد الشعر (ميزان الذهب)
+         ===================================================================== -->
+    <section id="tab-evaluate" class="tab-content" role="tabpanel">
+      <div class="section-header">
+        <h3 class="section-title">تحكيم الشعر ونقده</h3>
+        <p class="section-desc">فحص وزن الأبيات عروضياً وفق ميزان الخليل، تشخيص عيوب القوافي مع العلاج المقترح، ونسبة الشاهد إن كان تراثياً</p>
+      </div>
+
+      <div class="split-workspace">
+        <!-- Input Form -->
+        <div class="card eval-form-card">
+          <div class="card-header">
+            <h4 class="card-title">إدخال الأبيات للتحكيم</h4>
+          </div>
+
+          <div class="form-group">
+            <label for="eval-input-text" class="form-label">اكتب أو الصق الأبيات (افصل بين الصدر والعجز بـ ... أو سطر)</label>
+            <textarea id="eval-input-text" class="form-textarea" rows="6" placeholder="مثال:
+عَلى قَدْرِ أَهْلِ العَزْمِ تَأْتِي العَزائِمُ ... وَتَأْتِي عَلَى قَدْرِ الكِرامِ المَكارِمُ"></textarea>
+          </div>
+
+          <div class="quick-eval-samples">
+            <span class="quick-samples-label">أمثلة سريعة:</span>
+            <button id="sample-sound-btn" class="sample-btn" data-type="sound">بيت موزون سليم (المتنبي)</button>
+            <button id="sample-ikfa-btn" class="sample-btn" data-type="ikfa">عيب الإكفاء في الروي</button>
+            <button id="sample-broken-btn" class="sample-btn" data-type="broken">نثر مكسور</button>
+          </div>
+
+          <button id="btn-evaluate-submit" class="btn btn-action">
+            <span class="btn-spinner" id="eval-spinner" style="display: none;"></span>
+            <span class="btn-text" id="eval-btn-text">افحص وحكّم الشعر عروضياً</span>
+          </button>
+        </div>
+
+        <!-- Evaluation Results Card -->
+        <div class="card eval-output-card">
+          <div class="card-header">
+            <h4 class="card-title">تقرير التحكيم العروضي والبلاغي</h4>
+          </div>
+
+          <div id="eval-placeholder" class="empty-state">
+            <h5 class="empty-title">الناقد في انتظار الأبيات</h5>
+            <p class="empty-desc">أدخل بيتاً أو قصيدة واضغط فحص ليتم استخراج البحر، فحص التفاعيل، ونسبة القائل، وتشخيص عيوب القافية.</p>
+          </div>
+
+          <div id="eval-result" class="eval-report-sheet" style="display: none;">
+            <!-- Attribution Banner (Shown if matched to classical corpus) -->
+            <div id="eval-attribution-card" class="attribution-highlight-card" style="display: none;">
+              <div class="attribution-header">
+                <span class="attribution-badge">توثيق نسبة البيت</span>
+                <span id="eval-attr-era" class="attribution-era">العصر العباسي</span>
+              </div>
+              <div class="attribution-body">
+                <h4 id="eval-attr-poet" class="attribution-poet">أبو الطيب المتنبي</h4>
+                <p id="eval-attr-title" class="attribution-title">المصدر: ديوان المتنبي</p>
+                <p id="eval-attr-theme" class="attribution-theme">الغرض: فخر واعتداد بالنفس</p>
+              </div>
+            </div>
+
+            <!-- Score Bar -->
+            <div class="score-banner">
+              <div class="score-box">
+                <span id="eval-score-num" class="score-value">100</span>
+                <span class="score-label">جودة العروض</span>
+              </div>
+              <div class="score-summary">
+                <h4 id="eval-summary-title" class="summary-headline">قصيدة موزونة وسليمة العروض</h4>
+                <div class="summary-details">
+                  <span>البحر الأغلب: <strong id="eval-dom-meter">الطويل</strong></span>
+                  <span>الروي الملتزم: <strong id="eval-dom-rhyme">م</strong></span>
+                  <span>الأبيات السليمة: <strong id="eval-sound-count">1/1</strong></span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Mnemonic Key Box -->
+            <div class="mnemonic-box">
+              <span class="mnemonic-label">مفتاح البحر المنظوم عليه:</span>
+              <p id="eval-mnemonic-key" class="mnemonic-verse">طَوِيلٌ لَهُ دُونَ البُحُورِ فَضَائِلُ ... فَعُولُنْ مَفَاعِيلُنْ فَعُولُنْ مَفَاعِلُ</p>
+            </div>
+
+            <!-- Verse-by-verse audit -->
+            <div class="verses-audit-table">
+              <h5 class="table-heading">الفحص العروضي:</h5>
+              <div id="eval-verses-container">
+                <!-- Dynamically populated -->
+              </div>
+            </div>
+
+            <!-- Defects Box -->
+            <div id="eval-defects-box" class="defects-warning-box" style="display: none;">
+              <h5 class="defects-title">العيوب المرصودة وتصويبها وفق «ميزان الذهب»:</h5>
+              <div id="eval-defects-list"></div>
+            </div>
+
+            <!-- Rhetorical Critique -->
+            <div class="rhetorical-box">
+              <h5 class="rhetoric-title">النقد البياني والأدبي:</h5>
+              <p id="eval-rhetoric-text" class="rhetoric-paragraph"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         SECONDARY: MIZAN AL-DHAHAB ENCYCLOPEDIA
+         موسوعة ميزان الذهب
+         ===================================================================== -->
+    <section id="tab-mizan" class="tab-content" role="tabpanel">
+      <div class="section-header">
+        <h3 class="section-title">موسوعة «ميزان الذهب في صناعة شعر العرب»</h3>
+        <p class="section-desc">المرجع الكامل لبحور الخليل الستة عشر، الزحافات والعلل، وأحكام القوافي للشيخ أحمد الهاشمي</p>
+      </div>
+
+      <div class="meters-catalog-header">
+        <h4 class="catalog-title">بحور الشعر العربي الستة عشر</h4>
+        <span class="catalog-note">اختر أي بحر لعرض تفعيلاته ومفتاحه النغمي وزحافاته الجائزة من الكتاب</span>
+      </div>
+
+      <div class="meters-grid" id="meters-grid-container">
+        <!-- 16 meters cards dynamically populated -->
+      </div>
+
+      <!-- Meter Detail Drawer -->
+      <div id="meter-detail-drawer" class="meter-drawer" style="display: none;">
+        <div class="drawer-header">
+          <h3 id="drawer-meter-name" class="drawer-title">بحر الطويل</h3>
+          <button id="close-drawer-btn" class="btn-close">&times;</button>
+        </div>
+        <div class="drawer-body">
+          <div class="drawer-section">
+            <span class="drawer-label">مفتاح البحر النغمي:</span>
+            <p id="drawer-mnemonic" class="drawer-verse"></p>
+          </div>
+          <div class="drawer-section">
+            <span class="drawer-label">تفاعيل البحر القياسية:</span>
+            <p id="drawer-tafail" class="drawer-code"></p>
+          </div>
+          <div class="drawer-section">
+            <span class="drawer-label">طابعه البلاغي ومناسبته للأغراض:</span>
+            <p id="drawer-aesthetic" class="drawer-text"></p>
+          </div>
+          <div class="drawer-section">
+            <span class="drawer-label">نص الدرس الكامل من كتاب «ميزان الذهب»:</span>
+            <div id="drawer-full-lesson" class="drawer-book-content"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Rhyme Laws Card -->
+      <div class="card rhyme-laws-card">
+        <div class="card-header">
+          <h4 class="card-title">أحكام وقوانين القافية من «ميزان الذهب»</h4>
+        </div>
+        <div class="rhyme-rules-grid">
+          <div class="rule-box">
+            <h5 class="rule-title">حروف القافية الستة</h5>
+            <p class="rule-desc">الروي (الحرف الأصلي للقصيدة)، الوصل (حرف اللين أو الهاء)، الخروج، الردف (حرف المد قبل الروي)، التأسيس (ألف لينة قبلها دخيل)، والدخيل.</p>
+          </div>
+          <div class="rule-box">
+            <h5 class="rule-title">حركات القافية الستة</h5>
+            <p class="rule-desc">المجرى (حركة الروي المطلق)، النفاذ (حركة هاء الوصل)، الحذو، الإشباع (حركة الدخيل)، الرس، والتوجيه (حركة ما قبل الروي المقيد).</p>
+          </div>
+          <div class="rule-box">
+            <h5 class="rule-title">أشهر عيوب القوافي</h5>
+            <p class="rule-desc"><strong>الإقواء:</strong> اختلاف حركة الروي بين الضم والجر. <strong>الإكفاء:</strong> اختلاف حرف الروي بحرف مقارب. <strong>الإيطاء:</strong> تكرار الكلمة بمعناها قبل 7 أبيات.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         SECONDARY: COMPOSE POETRY (الملهم الشعري للنظم)
+         ===================================================================== -->
+    <section id="tab-compose" class="tab-content" role="tabpanel">
+      <div class="section-header">
+        <h3 class="section-title">الملهم الشعري (نظم المسودات)</h3>
+        <p class="section-desc">أداة مساعدة توليدية لاستلهام معاني الزمخشري وصياغة مسودات شعرية عمودية</p>
+      </div>
+
+      <div class="split-workspace">
+        <!-- Form Controls -->
+        <div class="card compose-form-card">
+          <div class="card-header">
+            <h4 class="card-title">إعدادات النظم</h4>
+          </div>
+
+          <div class="form-group">
+            <label for="topic-input" class="form-label">موضوع القصيدة أو الفكرة</label>
+            <input type="text" id="topic-input" class="form-input" placeholder="مثال: القهوة، الشجاعة، الصبر، المجد، العلم، الكرم..." value="الكرم وحسن الضيافة">
+            <div class="quick-samples-bar">
+              <span class="quick-samples-label">اقتراحات:</span>
+              <button class="tag-btn" data-topic="الكرم وحسن الضيافة">الكرم</button>
+              <button class="tag-btn" data-topic="القهوة العربية">القهوة</button>
+              <button class="tag-btn" data-topic="الشجاعة والفروسية">الشجاعة</button>
+              <button class="tag-btn" data-topic="الحكمة وتقلبات الدهر">الحكمة</button>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group half">
+              <label for="meter-select" class="form-label">البحر العروضي</label>
+              <select id="meter-select" class="form-select">
+                <option value="">تلقائي (الأصلح للغرض)</option>
+                <option value="الطويل">بحر الطويل (فعولن مفاعيلن)</option>
+                <option value="الكامل">بحر الكامل (متفاعلن متفاعلن)</option>
+                <option value="البسيط">بحر البسيط (مستفعلن فاعلن)</option>
+                <option value="الوافر">بحر الوافر (مفاعلتن مفاعلتن)</option>
+                <option value="الخفيف">بحر الخفيف (فاعلاتن مستفع لن)</option>
+              </select>
+            </div>
+
+            <div class="form-group half">
+              <label for="rhyme-select" class="form-label">حرف الروي (القافية)</label>
+              <select id="rhyme-select" class="form-select">
+                <option value="">تلقائي</option>
+                <option value="ل">حرف اللام (ل)</option>
+                <option value="م">حرف الميم (م)</option>
+                <option value="ر">حرف الراء (ر)</option>
+                <option value="د">حرف الدال (د)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="slider-header">
+              <label for="verses-count-slider" class="form-label">عدد الأبيات</label>
+              <span id="verses-count-display" class="slider-value">٣ أبيات</span>
+            </div>
+            <input type="range" id="verses-count-slider" class="form-range" min="1" max="6" value="3">
+          </div>
+
+          <button id="btn-compose-submit" class="btn btn-action">
+            <span class="btn-spinner" id="compose-spinner" style="display: none;"></span>
+            <span class="btn-text" id="compose-btn-text">أنشئ الأبيات الشعرية الآن</span>
+          </button>
+        </div>
+
+        <!-- Composition Output Display -->
+        <div class="card compose-output-card">
+          <div class="card-header">
+            <h4 class="card-title">الأبيات المنظومة</h4>
+            <div class="output-actions">
+              <button id="copy-poem-btn" class="btn-minimal" style="display: none;">نسخ الأبيات</button>
+            </div>
+          </div>
+
+          <div id="compose-placeholder" class="empty-state">
+            <h5 class="empty-title">في انتظار اختيار الموضوع</h5>
+            <p class="empty-desc">اختر موضوعاً واضغط على زر النظم ليقوم المساعد بصياغة مسودة شعرية مستلهمة من مجازات أساس البلاغة.</p>
+          </div>
+
+          <div id="compose-result" class="poem-showcase" style="display: none;">
+            <div class="poem-title-box">
+              <h3 id="poem-title" class="poem-headline">عنوان القصيدة</h3>
+              <div class="poem-meta-tags">
+                <span id="poem-theme-tag">الغرض: وصف</span>
+                <span class="sep">•</span>
+                <span id="poem-tafail-tag">التفاعيل: فَعُولُنْ مَفَاعِيلُنْ</span>
+                <span class="sep">•</span>
+                <span id="poem-score-tag">جودة العروض: 100%</span>
+              </div>
+            </div>
+
+            <!-- Verses Container (Clean classical layout, no boxes) -->
+            <div id="poem-verses-list" class="verses-sheet">
+              <!-- Dynamically populated -->
+            </div>
+
+            <!-- Balagha Metaphors Footnotes -->
+            <div id="poem-metaphors-box" class="metaphors-citation-box">
+              <h5 class="metaphors-title">مجازات مستلهمة من «أساس البلاغة» للزمخشري:</h5>
+              <ul id="metaphors-list" class="metaphors-list">
+                <!-- Dynamically populated -->
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- App Footer -->
+  <footer class="app-footer">
+    <div class="footer-container">
+      <p class="footer-copy">منظومة <strong>رَاوِي (RawiAI)</strong> — استدلال الشواهد الشعرية وبلاغة الزمخشري وميزان الخليل.</p>
+    </div>
+  </footer>
+
+  <script src="app.js?v=3.0"></script>
+</body>
+</html>
