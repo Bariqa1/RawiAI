@@ -12,6 +12,12 @@ RawiAI is a domain-specialized Retrieval-Augmented Generation (RAG) and Natural 
 
 ---
 
+<p align="center">
+  <img src="web/assets/ui_preview.png" alt="RawiAI Classical UI Preview" width="100%" />
+</p>
+
+---
+
 ## Architecture Overview
 
 ```
